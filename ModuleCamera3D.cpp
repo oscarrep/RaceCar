@@ -64,32 +64,25 @@ update_status ModuleCamera3D::Update(float dt)
 
 	// Mouse motion ----------------
 
-	/*if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
-
 		float Sensitivity = 0.25f;
-
 		Position -= Reference;
-
-		if(dx != 0)
+		if (dx != 0)
 		{
 			float DeltaX = (float)dx * Sensitivity;
-
 			X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
 			Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
 			Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
 		}
-
-		if(dy != 0)
+		if (dy != 0)
 		{
 			float DeltaY = (float)dy * Sensitivity;
-
 			Y = rotate(Y, DeltaY, X);
 			Z = rotate(Z, DeltaY, X);
-
-			if(Y.y < 0.0f)
+			if (Y.y < 0.0f)
 			{
 				Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
 				Y = cross(Z, X);
@@ -97,7 +90,10 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		Position = Reference + Z * length(Position);
-	}*/
+	}
+
+	else
+	{
 
 	mat4x4 matrix;
 	App->player->vehicle->GetTransform(&matrix);
@@ -110,6 +106,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 	vec3 VehicleLocation = { matrix[12], matrix[13] + 7, matrix[14] };
 	Look((VehicleLocation)-Z * 15, VehicleLocation, true);
+	}
 
 	// Recalculate matrix -------------
 	CalculateViewMatrix();

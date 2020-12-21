@@ -23,6 +23,12 @@ bool ModulePlayer::Start()
 	// Car properties ----------------------------------------
 	car.chassis_size.Set(3, 1.5, 6);
 	car.chassis_offset.Set(0, 1.5, 0);
+	car.cabin_size.Set(3, 2, 3);
+	car.cabin_offset.Set(0, 3, -1.5);
+	car.headlight_size.Set(0.5, 0.5, 0.5);
+	car.headlight_offset.Set(1, 1.5, 3);
+	car.headlight2_size.Set(0.5, 0.5, 0.5);
+	car.headlight2_offset.Set(-1, 1.5, 3);
 	car.mass = 500.0f;
 	car.suspensionStiffness = 15.88f;
 	car.suspensionCompression = 0.83f;
