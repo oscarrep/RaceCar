@@ -9,6 +9,13 @@
 struct PhysBody3D;
 struct PhysMotor3D;
 
+enum FLOOR_TYPE {
+	TOP_FLOOR,
+	BOTTOM_FLOOR,
+	WALL,
+	EMPTY_FLOOR,
+};
+
 class ModuleSceneIntro : public Module
 {
 public:
@@ -20,6 +27,7 @@ public:
 	bool CleanUp();
 
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
+	void CreateFloor(vec3 scale, int posX, int posZ);
 
 public:
 	/*
@@ -29,6 +37,11 @@ public:
 	PhysBody3D* pb_snake2[MAX_SNAKE];
 	Sphere s_snake2[MAX_SNAKE];
 	*/
+
+	p2DynArray<PhysBody3D*> pb_cubes;
+	p2DynArray<Cube>s_cubes;
+	PhysBody3D* pb_cube[5];
+	Cube s_cube[5];
 
 	PhysBody3D* pb_chassis;
 	Cube p_chassis;
