@@ -21,7 +21,7 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	int circuit[39] // 1 = create a path ; 2 = create a limit path;
+	int circuit[40] // 1 = create a path ; 2 = create a limit path;
 	{
 		2,2,2,2,
 		2,1,1,2,
@@ -32,7 +32,7 @@ bool ModuleSceneIntro::Start()
 		2,1,1,2,
 		2,1,1,2,
 		2,1,1,2,
-		2,1,1
+		2,1,1,1
 	};
 
 	for (int j = 0; j < 10; j++) {
@@ -43,9 +43,9 @@ bool ModuleSceneIntro::Start()
 	}
 
 	sensor_victory.color = Yellow;
-	sensor_victory.Size(30, 1, 30);
+	sensor_victory.Size(15, 1, 30);
 	pb_victory = App->physics->AddBody(sensor_victory, 0);
-	pb_victory->SetPos(90, 0, 270);
+	pb_victory->SetPos(90, 1, 270);
 	pb_victory->GetTransform(&sensor_victory.transform);
 	pb_victory->SetAsSensor(true);
 	pb_victory->collision_listeners.add(this);
@@ -68,22 +68,7 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 
-	if (pb_cubes.Count() != 0 && s_cubes.Count() != 0 && s_cubes.Count() == pb_cubes.Count()) {
-		for (int i = 0; i < s_cubes.Count(); i++) {
-			pb_cubes[i]->GetTransform(&s_cubes[i].transform);
-			s_cubes[i].Render();
-		}
-
-	}
-
-	if (pb_limits.Count() != 0 && s_limits.Count() != 0 && s_limits.Count() == pb_limits.Count()) {
-		for (int i = 0; i < s_limits.Count(); i++) {
-			pb_limits[i]->GetTransform(&s_limits[i].transform);
-			pb_limits[i]->SetAsSensor(true);
-			pb_limits[i]->collision_listeners.add(this);
-		}
-		sensor_victory.Render();
-	}
+	Painting();
 
 	return UPDATE_CONTINUE;
 }
@@ -91,13 +76,31 @@ update_status ModuleSceneIntro::Update(float dt)
 void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
 	if ((body1 == pb_victory) || (body2 == pb_victory))
+	{
+		if (win)
+		{
+			App->player->playerTime.Stop();
+			reset.Start();
+			win = false;
+			App->player->controls = false;
+			App->player->reset = true;
+			App->player->Stop();
+		}
+	}
+
+	if (reset.Read() >= 5000)
+	{
 		App->player->GameWin();
-	
+	}
+
 	for (int i = 0; i < s_limits.Count(); i++)
 	{
 		if ((body1 == pb_limits[i]) || (body2 == pb_limits[i]))
+		{
 			App->player->Restart();
+		}
 	}
+
 }
 
 void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir) 
@@ -133,4 +136,24 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		break;
 	}
 
+}
+
+void ModuleSceneIntro::Painting()
+{
+	if (pb_cubes.Count() != 0 && s_cubes.Count() != 0 && s_cubes.Count() == pb_cubes.Count()) {
+		for (int i = 0; i < s_cubes.Count(); i++) {
+			pb_cubes[i]->GetTransform(&s_cubes[i].transform);
+			s_cubes[i].Render();
+		}
+
+	}
+
+	if (pb_limits.Count() != 0 && s_limits.Count() != 0 && s_limits.Count() == pb_limits.Count()) {
+		for (int i = 0; i < s_limits.Count(); i++) {
+			pb_limits[i]->GetTransform(&s_limits[i].transform);
+			pb_limits[i]->SetAsSensor(true);
+			pb_limits[i]->collision_listeners.add(this);
+		}
+		/*sensor_victory.Render();*/
+	}
 }

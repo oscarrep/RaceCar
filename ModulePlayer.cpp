@@ -125,35 +125,36 @@ update_status ModulePlayer::Update(float dt)
 {
 	turn = acceleration = brake = 0.0f;
 
-	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT && controls)
 	{
 		acceleration = MAX_ACCELERATION;
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT && controls)
 	{
 		if(turn < TURN_DEGREES)
 			turn +=  TURN_DEGREES;
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT && controls)
 	{
 		if(turn > -TURN_DEGREES)
 			turn -= TURN_DEGREES;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT && controls)
 	{
 		acceleration = -MAX_ACCELERATION;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && controls)
 	{
 		brake = BRAKE_POWER;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
+		playerTime.Start();
 		Restart();
 	}
 
@@ -163,7 +164,7 @@ update_status ModulePlayer::Update(float dt)
 
 	vehicle->Render();
 	
-	UI();
+	UI(reset);
 
 	return UPDATE_CONTINUE;
 }
@@ -177,8 +178,7 @@ void ModulePlayer::Restart()
 {
 	mat4x4 matrix;
 	vehicle->SetTransform(matrix.M);
-	vehicle->GetBody()->setAngularVelocity({ 0, 0, 0 });
-	vehicle->GetBody()->setLinearVelocity({ 0, 0, 0 });
+	Stop();
 	vehicle->SetPos(30, 2, 30);
 }
 
@@ -187,13 +187,23 @@ void ModulePlayer::GameWin()
 	SetScore();
 	Restart();
 	playerTime.Start();
+	App->scene_intro->win = true;
+	controls = true;
+	reset = false;
 }
 
-void ModulePlayer::UI()
+void ModulePlayer::UI(bool reset)
 {
 	char title[80];
 
-	sprintf_s(title, "%.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+	if (!reset)
+	{
+		sprintf_s(title, "%.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+	}
+	if (reset)
+	{
+		sprintf_s(title, "YOU WON! Your Time: %.0f Best Time: %.0f", ShowTime(), bestTime);
+	}
 
 	App->window->SetTitle(title);
 }
@@ -208,4 +218,10 @@ void ModulePlayer::SetScore()
 	{
 		bestTime = ShowTime();
 	}
+}
+
+void ModulePlayer::Stop()
+{
+	vehicle->GetBody()->setAngularVelocity({ 0, 0, 0 });
+	vehicle->GetBody()->setLinearVelocity({ 0, 0, 0 });
 }

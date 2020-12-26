@@ -28,7 +28,7 @@ public:
 
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 	void CreateFloor(vec3 scale, int posX, int posZ, int cir);
-
+	void Painting();
 
 public:
 	/*
@@ -62,4 +62,7 @@ public:
 
 	PhysBody3D* pb_victory;
 	Cube sensor_victory;
+
+	Timer reset;
+	bool win = true;
 };

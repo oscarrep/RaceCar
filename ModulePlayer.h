@@ -21,8 +21,10 @@ public:
 	float ShowTime();
 	void Restart();
 	void GameWin();
-	void UI();
+	void UI(bool reset);
 	void SetScore();
+	void Stop();
+
 
 public:
 
@@ -32,5 +34,8 @@ public:
 	float brake;
 	float bestTime = 0.0f;
 	Timer playerTime;
+
+	bool controls = true;
+	bool reset = false;
 
 };
