@@ -106,7 +106,8 @@ bool ModulePlayer::Start()
 	car.wheels[3].steering = false;
 
 	vehicle = App->physics->AddVehicle(car);
-	vehicle->SetPos(0, 2, 0);
+	vehicle->SetPos(30, 2, 30);
+	/*vehicle->collision_listeners.add(this);*/
 	
 	return true;
 }
@@ -141,14 +142,19 @@ update_status ModulePlayer::Update(float dt)
 			turn -= TURN_DEGREES;
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	{
+		acceleration = -MAX_ACCELERATION;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
 		brake = BRAKE_POWER;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
-		ResetCar();
+		Restart();
 	}
 
 	vehicle->ApplyEngineForce(acceleration);
@@ -156,9 +162,11 @@ update_status ModulePlayer::Update(float dt)
 	vehicle->Brake(brake);
 
 	vehicle->Render();
+	
+	/*InFloor();*/
 
 	char title[80];
-	sprintf_s(title, "%.1f Km/h  Timer: %.0f s", vehicle->GetKmh(), ShowTime());
+	sprintf_s(title, "%.1f Km/h  Time: %.0f s", vehicle->GetKmh(), ShowTime());
 	App->window->SetTitle(title);
 
 	return UPDATE_CONTINUE;
@@ -169,11 +177,11 @@ float ModulePlayer::ShowTime()
 	return playerTime.Read() / 1000;
 }
 
-void ModulePlayer::ResetCar()
+void ModulePlayer::Restart()
 {
 	mat4x4 matrix;
 	vehicle->SetTransform(matrix.M);
 	vehicle->GetBody()->setAngularVelocity({ 0, 0, 0 });
 	vehicle->GetBody()->setLinearVelocity({ 0, 0, 0 });
-	vehicle->SetPos(0, 2, 0);
+	vehicle->SetPos(30, 2, 30);
 }
