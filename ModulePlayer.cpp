@@ -163,11 +163,7 @@ update_status ModulePlayer::Update(float dt)
 
 	vehicle->Render();
 	
-	/*InFloor();*/
-
-	char title[80];
-	sprintf_s(title, "%.1f Km/h  Time: %.0f s", vehicle->GetKmh(), ShowTime());
-	App->window->SetTitle(title);
+	UI();
 
 	return UPDATE_CONTINUE;
 }
@@ -184,4 +180,32 @@ void ModulePlayer::Restart()
 	vehicle->GetBody()->setAngularVelocity({ 0, 0, 0 });
 	vehicle->GetBody()->setLinearVelocity({ 0, 0, 0 });
 	vehicle->SetPos(30, 2, 30);
+}
+
+void ModulePlayer::GameWin()
+{
+	SetScore();
+	Restart();
+	playerTime.Start();
+}
+
+void ModulePlayer::UI()
+{
+	char title[80];
+
+	sprintf_s(title, "%.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+
+	App->window->SetTitle(title);
+}
+
+void ModulePlayer::SetScore()
+{
+	if (bestTime == 0)
+	{
+		bestTime = ShowTime();
+	}
+	if (ShowTime() < bestTime)
+	{
+		bestTime = ShowTime();
+	}
 }

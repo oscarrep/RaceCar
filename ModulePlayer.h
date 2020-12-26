@@ -20,6 +20,9 @@ public:
 	bool CleanUp();
 	float ShowTime();
 	void Restart();
+	void GameWin();
+	void UI();
+	void SetScore();
 
 public:
 
@@ -27,7 +30,7 @@ public:
 	float turn;
 	float acceleration;
 	float brake;
-	float time = 0.0f;
+	float bestTime = 0.0f;
 	Timer playerTime;
 
 };
