@@ -18,6 +18,7 @@ public:
 	bool Start();
 	update_status Update(float dt);
 	bool CleanUp();
+	float ShowTime();
 
 public:
 
@@ -26,4 +27,6 @@ public:
 	float acceleration;
 	float brake;
 	float time = 0.0f;
+	Timer playerTime;
+
 };

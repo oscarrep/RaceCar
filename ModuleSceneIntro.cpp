@@ -17,24 +17,10 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	int circuit[40] // 1 = create a path ; 2 = doesnt create a path;
-	{
-		1,2,2,2,
-		1,1,2,2,
-		2,1,1,2,
-		2,2,1,2,
-		2,2,1,1,
-		2,2,2,1,
-		2,1,1,1,
-		2,1,2,2,
-		2,1,1,1,
-		2,2,2,1
-	};
-
 	for (int j = 0; j < 10; j++) {
 		for (int i = 0; i < 4; i++) {
 			int cir = circuit[(4 * j) + i];
-			CreateFloor(vec3(30, 1, 30), 30 * i, 30 * j, cir);
+			CreateFloor(vec3(30, 1, 30), 30 * i, 30 * j, circuit[(4 * j) + i]);
 		}
 	}
 
@@ -73,12 +59,17 @@ update_status ModuleSceneIntro::Update(float dt)
 
 void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
+	//if (body1 == )
 }
 
 void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir) 
 {
 	Cube cubes;
 	PhysBody3D* pb_cube;
+	Cube cubes2;
+	cubes2.color = Yellow;
+	cubes2.SetRotation(-15, vec3(1, 0, 0));
+	PhysBody3D* pb_cube2;
 
 	switch (cir)
 	{
@@ -90,6 +81,13 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cubes.PushBack(pb_cube);
 		break;
 	case 2:
+		break;
+	case 3:
+		cubes2.Scale(scale.x, scale.y, scale.z);
+		s_cubes.PushBack(cubes2);
+		pb_cube2 = App->physics->AddBody(cubes2, 0);
+		pb_cube2->SetPos(posX, 0, posZ);
+		pb_cubes.PushBack(pb_cube2);
 		break;
 	default:
 		break;
