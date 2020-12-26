@@ -27,7 +27,7 @@ public:
 	bool CleanUp();
 
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
-	void CreateFloor(vec3 scale, int posX, int posZ);
+	void CreateFloor(vec3 scale, int posX, int posZ, int cir);
 
 public:
 	/*
