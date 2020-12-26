@@ -3,6 +3,7 @@
 #include "ModulePlayer.h"
 #include "Primitive.h"
 #include "PhysVehicle3D.h"
+#include "ModuleSceneIntro.h"
 #include "PhysBody3D.h"
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled), vehicle(NULL)
@@ -105,7 +106,7 @@ bool ModulePlayer::Start()
 	car.wheels[3].steering = false;
 
 	vehicle = App->physics->AddVehicle(car);
-	vehicle->SetPos(0, 12, 10);
+	vehicle->SetPos(0, 2, 0);
 	
 	return true;
 }
@@ -145,6 +146,11 @@ update_status ModulePlayer::Update(float dt)
 		brake = BRAKE_POWER;
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+	{
+		ResetCar();
+	}
+
 	vehicle->ApplyEngineForce(acceleration);
 	vehicle->Turn(turn);
 	vehicle->Brake(brake);
@@ -161,4 +167,13 @@ update_status ModulePlayer::Update(float dt)
 float ModulePlayer::ShowTime()
 {
 	return playerTime.Read() / 1000;
+}
+
+void ModulePlayer::ResetCar()
+{
+	mat4x4 matrix;
+	vehicle->SetTransform(matrix.M);
+	vehicle->GetBody()->setAngularVelocity({ 0, 0, 0 });
+	vehicle->GetBody()->setLinearVelocity({ 0, 0, 0 });
+	vehicle->SetPos(0, 2, 0);
 }

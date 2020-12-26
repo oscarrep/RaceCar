@@ -28,6 +28,8 @@ public:
 
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 	void CreateFloor(vec3 scale, int posX, int posZ, int cir);
+	//void CreateLimit(vec3 scale, int posX, int posZ, int lim);
+
 
 public:
 	/*
@@ -38,7 +40,7 @@ public:
 	Sphere s_snake2[MAX_SNAKE];
 	*/
 
-	int circuit[40] // 1 = create a path ; 2 = doesnt create a path;
+	int circuit[39] // 1 = create a path ; 2 = doesnt create a path;
 	{
 		1,2,2,2,
 		1,1,2,2,
@@ -49,12 +51,15 @@ public:
 		2,1,1,1,
 		2,1,2,2,
 		2,1,1,1,
-		2,2,2,1
+		2,2,2
 	};
 
 	p2DynArray<PhysBody3D*> pb_cubes;
 	p2DynArray<Cube>s_cubes;
 	
+	p2DynArray<PhysBody3D*> pb_cylinders;
+	p2DynArray<Cylinder>s_cylinders;
+
 	//PhysBody3D* pb_cube[5];
 	//Cube s_cube[5];
 
@@ -69,4 +74,7 @@ public:
 
 	PhysMotor3D* left_wheel;
 	PhysMotor3D* right_wheel;
+
+	Cube cubes2;
+	PhysBody3D* pb_cube2;
 };

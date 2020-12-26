@@ -19,6 +19,7 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 	float ShowTime();
+	void ResetCar();
 
 public:
 
