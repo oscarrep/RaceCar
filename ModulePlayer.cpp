@@ -63,7 +63,7 @@ bool ModulePlayer::Start()
 	vec3 axis(-1,0,0);
 	
 	car.num_wheels = 4;
-	car.wheels = new Wheel[4];
+	car.wheels = new Wheel[car.num_wheels];
 
 	// FRONT-LEFT ------------------------
 	car.wheels[0].connection.Set(half_width - 0.3f * wheel_width, connection_height, half_length - wheel_radius);
