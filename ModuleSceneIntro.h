@@ -5,6 +5,7 @@
 #include "Primitive.h"
 
 #define MAX_SNAKE 2
+#define MAX_CIRCUITSIZE 300
 
 struct PhysBody3D;
 struct PhysMotor3D;
@@ -29,6 +30,8 @@ public:
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 	void CreateFloor(vec3 scale, int posX, int posZ, int cir);
 	void Painting();
+	int Size(int* vec);
+	void LoadCircuit(int* lvlcircuit, int* circuitx);
 
 public:
 	/*
@@ -69,20 +72,6 @@ public:
 	Timer reset;
 	bool win = true;
 
-	int circuit[70]{
-		//1 = create path //2 = create path limit
-		//3 = create flag //4 = create slider //5 = create obstacle
-		2,2,2,1,2,2,2,
-		2,2,2,7,2,2,2,
-		2,2,2,1,2,2,2,
-		2,2,1,1,1,2,2,
-		2,2,1,7,6,2,2,
-		2,2,5,7,5,2,2,
-		2,2,1,7,1,2,2,
-		2,2,1,7,1,2,2,
-		2,2,1,5,1,2,2,
-		2,2,2,1,2,2,2,
-	};
+	int circuit[MAX_CIRCUITSIZE];
 
-	
 };
