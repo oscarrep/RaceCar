@@ -5,6 +5,7 @@
 
 class btRigidBody;
 class Module;
+class vec3;
 
 // =================================================
 struct PhysBody3D
@@ -20,7 +21,7 @@ public:
 	void SetPos(float x, float y, float z);
 	void SetAsSensor(bool is_sensor);
 	btRigidBody* GetBody();
-
+	vec3 GetPos() const;
 private:
 	btRigidBody* body = nullptr;
 	bool is_sensor = false;

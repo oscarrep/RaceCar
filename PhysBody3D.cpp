@@ -64,3 +64,10 @@ btRigidBody* PhysBody3D::GetBody()
 {
 	return body;
 }
+
+vec3 PhysBody3D::GetPos() const
+{
+	btTransform t = body->getWorldTransform();
+	vec3 position(t.getOrigin().getX(), t.getOrigin().getY(), t.getOrigin().getZ());
+	return position;
+}
