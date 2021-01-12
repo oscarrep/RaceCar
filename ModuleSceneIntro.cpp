@@ -29,9 +29,9 @@ bool ModuleSceneIntro::Start()
 	}
 
 	sensor_victory.color = Yellow;
-	sensor_victory.Size(15, 1, 30);
+	sensor_victory.Size(30, 1, 15);
 	pb_victory = App->physics->AddBody(sensor_victory, 0);
-	pb_victory->SetPos(90, 2, 270);
+	pb_victory->SetPos(0,0,0);
 	pb_victory->GetTransform(&sensor_victory.transform);
 	pb_victory->SetAsSensor(true);
 	pb_victory->collision_listeners.add(this);
@@ -50,6 +50,19 @@ bool ModuleSceneIntro::Start()
 			App->physics->AddConstraintHinge(*pb_chain[i], *pb_chain[i - 1], vec3(-2 * size, 0, 0), vec3(0, 0, 0), vec3(0, 1, 0), vec3(0, 1, 0));
 		}
 
+	}
+
+	for (int i = 0; i < 70; ++i)
+	{
+		for (int i = 0; i < 70; ++i)
+		{
+			if (circuit[i] == 1)
+			{
+				int j = i / 7 * 30;
+				int q = i % 7 * 30;
+				pb_victory->SetPos(q, 3, j);
+			}
+		}
 	}
 
 	return ret;
@@ -186,7 +199,14 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube2->SetPos(posX, 1.1, posZ);
 		pb_limits.PushBack(pb_cube2);
 		break;
-	default:
+	case 7:
+		//ivisible floor
+		cubes.Size(scale.x, scale.y, scale.z);
+		s_cubes.PushBack(cubes);
+		pb_cube = App->physics->AddBody(cubes, 0);
+		pb_cube->SetPos(posX, 1, posZ);
+		pb_cube->painting = false;
+		pb_cubes.PushBack(pb_cube);
 		break;
 	}
 
@@ -202,7 +222,8 @@ void ModuleSceneIntro::Painting()
 	{
 		for (int i = 0; i < s_cubes.Count(); i++) {
 			pb_cubes[i]->GetTransform(&s_cubes[i].transform);
-			s_cubes[i].Render();
+			if (pb_cubes[i]->painting == true)
+				s_cubes[i].Render();
 		}
 
 	}
