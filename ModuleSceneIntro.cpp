@@ -30,7 +30,7 @@ bool ModuleSceneIntro::Start()
 		2,1,1,2,
 		2,1,1,2,
 		2,1,1,2,
-		2,1,1,2,
+		2,4,1,2,
 		2,1,1,2,
 		2,1,1,1
 	};
@@ -52,6 +52,19 @@ bool ModuleSceneIntro::Start()
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
+
+	float size = 2.0f;
+	for (int i = 0; i < 5; i++)
+	{
+		chain[i].radius = size;
+		chain[i].SetPos(40 + (size * (i + 1)) + (size * i), 10.f, 40);
+		pb_chain[i] = App->physics->AddBody(chain[i]);
+		if (i > 0)
+		{
+			App->physics->AddConstraintHinge(*pb_chain[i], *pb_chain[i - 1], vec3(-2 * size, 0, 0), vec3(0, 0, 0), vec3(0, 1, 0), vec3(0, 1, 0));
+		}
+
+	}
 
 	return ret;
 }
@@ -75,7 +88,7 @@ update_status ModuleSceneIntro::Update(float dt)
 
 void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
-	if ((body1 == pb_victory) || (body2 == pb_victory))
+	if ((body1 == pb_victory) && (body2 == (PhysBody3D*)App->player->vehicle) || (body2 == pb_victory) && (body2 == (PhysBody3D*)App->player->vehicle))
 	{
 		if (win)
 		{
@@ -95,7 +108,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 
 	for (int i = 0; i < s_limits.Count(); i++)
 	{
-		if ((body1 == pb_limits[i]) || (body2 == pb_limits[i]))
+		if ((body1 == pb_limits[i]) && (body2 == (PhysBody3D*)App->player->vehicle) || (body2 == pb_limits[i]) && (body2 == (PhysBody3D*)App->player->vehicle))
 		{
 			App->player->Restart();
 		}
@@ -132,6 +145,24 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cubes.PushBack(pb_cube2);
 		LOG("%i, %i", posX, posZ);
 		break;
+	case 4:
+		//FLOOR
+		cubes.Size(scale.x, scale.y, scale.z);
+		cubes.color = Green;
+		s_cubes.PushBack(cubes);
+		pb_cube = App->physics->AddBody(cubes, 0);
+		pb_cube->SetPos(posX, scale.y * 0.5, posZ);
+		pb_cubes.PushBack(pb_cube);
+		//SLIDER OBSTACLE
+		cubes.Size(scale.x, 7, scale.y);
+		cubes.color = Red;
+		s_cubes.PushBack(cubes);
+		pb_cube = App->physics->AddBody(cubes, 100);
+
+		pb_cube->SetPos(posX, 27 * 0.5, posZ + (scale.x * 0.5));
+		App->physics->AddConstraintSlider(*pb_cube, true);
+		pb_cubes.PushBack(pb_cube);
+		break;
 	default:
 		break;
 	}
@@ -140,7 +171,8 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 
 void ModuleSceneIntro::Painting()
 {
-	if (pb_cubes.Count() != 0 && s_cubes.Count() != 0 && s_cubes.Count() == pb_cubes.Count()) {
+	if (pb_cubes.Count() != 0 && s_cubes.Count() != 0 && s_cubes.Count() == pb_cubes.Count()) 
+	{
 		for (int i = 0; i < s_cubes.Count(); i++) {
 			pb_cubes[i]->GetTransform(&s_cubes[i].transform);
 			s_cubes[i].Render();
@@ -148,12 +180,19 @@ void ModuleSceneIntro::Painting()
 
 	}
 
-	if (pb_limits.Count() != 0 && s_limits.Count() != 0 && s_limits.Count() == pb_limits.Count()) {
+	if (pb_limits.Count() != 0 && s_limits.Count() != 0 && s_limits.Count() == pb_limits.Count()) 
+	{
 		for (int i = 0; i < s_limits.Count(); i++) {
 			pb_limits[i]->GetTransform(&s_limits[i].transform);
 			pb_limits[i]->SetAsSensor(true);
 			pb_limits[i]->collision_listeners.add(this);
 		}
 		/*sensor_victory.Render();*/
+	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		pb_chain[i]->GetTransform(&(chain[i].transform));
+		chain[i].Render();
 	}
 }
