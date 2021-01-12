@@ -43,7 +43,7 @@ public:
 	p2DynArray<Cube>s_cubes;
 	
 	p2DynArray<PhysBody3D*> pb_limits;
-	p2DynArray<Cylinder>s_limits;
+	p2DynArray<Cube>s_limits;
 
 	//PhysBody3D* pb_cube[5];
 	//Cube s_cube[5];

@@ -28,7 +28,7 @@ bool ModuleSceneIntro::Start()
 		2,1,1,2,
 		2,1,1,2,
 		2,1,1,2,
-		2,1,1,2,
+		2,5,5,2,
 		2,1,1,2,
 		2,4,1,2,
 		2,1,1,2,
@@ -123,12 +123,11 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 
 	Cube cubes2;
 	PhysBody3D* pb_cube2;
-	cubes2.color = Yellow;
-	cubes2.SetRotation(-15, vec3(1, 0, 0));
 
 	switch (cir)
 	{
 	case 1:
+		//floor
 		cubes.Size(scale.x, scale.y, scale.z);
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
@@ -136,8 +135,15 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cubes.PushBack(pb_cube);
 		break;
 	case 2:
+		//Limit
+		cubes2.Size(scale.x, scale.y, scale.z);
+		s_limits.PushBack(cubes2);
+		pb_cube2 = App->physics->AddBody(cubes2, 0);
+		pb_cube2->SetPos(posX, 0, posZ);
+		pb_limits.PushBack(pb_cube2);
 		break;
 	case 3:
+		//flag
 		cubes2.Size(scale.x, scale.y, scale.z);
 		s_cubes.PushBack(cubes2);
 		pb_cube2 = App->physics->AddBody(cubes2, 0);
@@ -146,21 +152,37 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		LOG("%i, %i", posX, posZ);
 		break;
 	case 4:
-		//FLOOR
+		//Floor
 		cubes.Size(scale.x, scale.y, scale.z);
 		cubes.color = Green;
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
-		pb_cube->SetPos(posX, scale.y * 0.5, posZ);
+		pb_cube->SetPos(posX, 0, posZ);
 		pb_cubes.PushBack(pb_cube);
-		//SLIDER OBSTACLE
+
+		//SLIDER
 		cubes.Size(scale.x, 7, scale.y);
 		cubes.color = Red;
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 100);
 
-		pb_cube->SetPos(posX, 27 * 0.5, posZ + (scale.x * 0.5));
+		pb_cube->SetPos(posX, 13.5, posZ);
 		App->physics->AddConstraintSlider(*pb_cube, true);
+		pb_cubes.PushBack(pb_cube);
+		break;
+	case 5:
+		//Floor
+		cubes.Size(scale.x, scale.y, scale.z);
+		s_cubes.PushBack(cubes);
+		pb_cube = App->physics->AddBody(cubes, 0);
+		pb_cube->SetPos(posX, 0, posZ);
+		pb_cubes.PushBack(pb_cube);
+
+		//Obstacle
+		cubes.Size(15, 7, 2);
+		s_cubes.PushBack(cubes);
+		pb_cube = App->physics->AddBody(cubes, 0);
+		pb_cube->SetPos(posX, 3, posZ);
 		pb_cubes.PushBack(pb_cube);
 		break;
 	default:
