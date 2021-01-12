@@ -39,6 +39,15 @@ bool ModuleSceneIntro::Start()
 	//load circuit1, only for 7-column circuits
 	LoadCircuit(circuit, circuit1);
 
+	if (pb_limits.Count() != 0 && s_limits.Count() != 0 && s_limits.Count() == pb_limits.Count())
+	{
+		for (int i = 0; i < s_limits.Count(); i++) {
+			/*pb_limits[i]->GetTransform(&s_limits[i].transform);*/
+			pb_limits[i]->SetAsSensor(true);
+			pb_limits[i]->collision_listeners.add(this);
+		}
+	}
+
 	sensor_victory.color = Yellow;
 	sensor_victory.Size(30, 1, 15);
 	pb_victory = App->physics->AddBody(sensor_victory, 0);
@@ -50,7 +59,7 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-	float size = 2.0f;
+	/*float size = 2.0f;
 	for (int i = 0; i < 5; i++)
 	{
 		chain[i].radius = size;
@@ -61,7 +70,7 @@ bool ModuleSceneIntro::Start()
 			App->physics->AddConstraintHinge(*pb_chain[i], *pb_chain[i - 1], vec3(-2 * size, 0, 0), vec3(0, 0, 0), vec3(0, 1, 0), vec3(0, 1, 0));
 		}
 
-	}
+	}*/
 
 	for (int i = 0; i < 70; ++i)
 	{
@@ -233,7 +242,7 @@ void ModuleSceneIntro::Painting()
 	{
 		for (int i = 0; i < s_cubes.Count(); i++) {
 			pb_cubes[i]->GetTransform(&s_cubes[i].transform);
-			if (pb_cubes[i]->painting == true)
+			//if (pb_cubes[i]->painting == true)
 				s_cubes[i].Render();
 		}
 
@@ -249,11 +258,11 @@ void ModuleSceneIntro::Painting()
 		/*sensor_victory.Render();*/
 	}
 
-	for (int i = 0; i < 5; i++)
+	/*for (int i = 0; i < 5; i++)
 	{
 		pb_chain[i]->GetTransform(&(chain[i].transform));
 		chain[i].Render();
-	}
+	}*/
 }
 
 int ModuleSceneIntro::Size(int* vec)
