@@ -115,7 +115,7 @@ bool ModulePlayer::Start()
 
 	vehicle = App->physics->AddVehicle(car);
 	vehicle->SetPos(30, 2, 30);
-	/*vehicle->collision_listeners.add(this);*/
+	Restart();
 	
 	return true;
 }
@@ -133,24 +133,24 @@ update_status ModulePlayer::Update(float dt)
 {
 	turn = acceleration = brake = 0.0f;
 
-	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT && controls)
+	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && controls)
 	{
 		acceleration = MAX_ACCELERATION;
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT && controls)
+	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && controls)
 	{
 		if(turn < TURN_DEGREES)
 			turn +=  TURN_DEGREES;
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT && controls)
+	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && controls)
 	{
 		if(turn > -TURN_DEGREES)
 			turn -= TURN_DEGREES;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT && controls)
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && controls)
 	{
 		acceleration = -MAX_ACCELERATION;
 	}
@@ -187,7 +187,16 @@ void ModulePlayer::Restart()
 	mat4x4 matrix;
 	vehicle->SetTransform(matrix.M);
 	Stop();
-	vehicle->SetPos(30, 2, 30);
+	for (int i = 0; i < 70; ++i)
+	{
+		if (App->scene_intro->circuit[i] == 1)
+		{
+			int j = i / 7 * 30;
+			int q = i % 7 * 30;
+			vehicle->SetPos(q, 2, j);
+			break;
+		}
+	}
 }
 
 void ModulePlayer::GameWin()

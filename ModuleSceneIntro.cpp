@@ -21,27 +21,8 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	int circuit[40] 
-	// 1 = create a path ; 
-	//2 = create a limit path; 
-	//3 = create a flag; 
-	//4 = create a slider; 
-	//5 = create an obstacle;
-	{
-		2,2,2,2,
-		2,1,1,2,
-		2,1,1,2,
-		2,1,1,2,
-		2,1,1,2,
-		2,5,5,2,
-		2,1,1,2,
-		2,4,1,2,
-		2,1,1,2,
-		2,1,1,1
-	};
-
 	for (int j = 0; j < 10; j++) {
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 7; i++) {
 			int cir = circuit[(4 * j) + i];
 			//CreateFloor(vec3(30, 1, 30), 30 * i, 30 * j, circuit[(4 * j) + i]);
 		}
@@ -189,6 +170,21 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube = App->physics->AddBody(cubes, 0);
 		pb_cube->SetPos(posX, 3, posZ);
 		pb_cubes.PushBack(pb_cube);
+		break;
+	case 6:
+		//floor
+		cubes.Size(scale.x, scale.y, scale.z);
+		s_cubes.PushBack(cubes);
+		pb_cube = App->physics->AddBody(cubes, 0);
+		pb_cube->SetPos(posX, 1, posZ);
+		pb_cubes.PushBack(pb_cube);
+
+		//limit
+		cubes2.Size(scale.x, scale.y, scale.z);
+		s_limits.PushBack(cubes2);
+		pb_cube2 = App->physics->AddBody(cubes2, 0);
+		pb_cube2->SetPos(posX, 1.1, posZ);
+		pb_limits.PushBack(pb_cube2);
 		break;
 	default:
 		break;

@@ -69,5 +69,20 @@ public:
 	Timer reset;
 	bool win = true;
 
+	int circuit[70]{
+		//1 = create path //2 = create path limit
+		//3 = create flag //4 = create slider //5 = create obstacle
+		2,2,2,1,2,2,2,
+		2,2,2,1,2,2,2,
+		2,2,2,1,2,2,2,
+		2,2,1,1,1,2,2,
+		2,2,1,2,6,2,2,
+		2,2,5,2,5,2,2,
+		2,2,1,2,1,2,2,
+		2,2,1,2,1,2,2,
+		2,2,1,5,1,2,2,
+		2,2,2,1,2,2,2,
+	};
+
 	
 };
