@@ -32,6 +32,8 @@ private:
 public:
 	p2List<Module*> collision_listeners;
 	bool painting = true;
+	bool sliders = false;
+
 };
 
 #endif // __PhysBody3D_H__

@@ -64,7 +64,7 @@ public:
 	Cylinder p_wheel2;
 
 	Sphere chain;
-	Cube leftstick, rightstick, pole;
+	Cube  rightstick;
 	PhysBody3D* pb_chain, * pb_leftstick, * pb_rightstick, * pb_pole;
 
 	PhysMotor3D* left_wheel;
