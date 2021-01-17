@@ -25,7 +25,7 @@ void PhysVehicle3D::Render()
 {
 	Cylinder wheel;
 
-	wheel.color = Blue;
+	wheel.color = Black;
 
 	for(int i = 0; i < vehicle->getNumWheels(); ++i)
 	{
@@ -66,6 +66,12 @@ void PhysVehicle3D::Render()
 	Cube backheadlight2(info.backheadlight2_size.x, info.backheadlight2_size.y, info.backheadlight2_size.z);
 	vehicle->getChassisWorldTransform().getOpenGLMatrix(&backheadlight2.transform);
 
+	Cube siren(info.siren_size.x, info.siren_size.y, info.siren_size.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&siren.transform);
+
+	Cube siren2(info.siren2_size.x, info.siren2_size.y, info.siren2_size.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&siren2.transform);
+
 	btQuaternion q = vehicle->getChassisWorldTransform().getRotation();
 	btVector3 offset(info.chassis_offset.x, info.chassis_offset.y, info.chassis_offset.z);
 	offset = offset.rotate(q.getAxis(), q.getAngle());
@@ -97,9 +103,23 @@ void PhysVehicle3D::Render()
 	btVector3 backheadlight2_offset(info.backheadlight2_offset.x, info.backheadlight2_offset.y, info.backheadlight2_offset.z);
 	backheadlight2_offset = backheadlight2_offset.rotate(q.getAxis(), q.getAngle());
 
+	btVector3 siren_offset(info.siren_offset.x, info.siren_offset.y, info.siren_offset.z);
+	siren_offset = siren_offset.rotate(q.getAxis(), q.getAngle());
+
+	btVector3 siren2_offset(info.siren2_offset.x, info.siren2_offset.y, info.siren2_offset.z);
+	siren2_offset = siren2_offset.rotate(q.getAxis(), q.getAngle());
+
 	chassis.transform.M[12] += offset.getX();
 	chassis.transform.M[13] += offset.getY();
 	chassis.transform.M[14] += offset.getZ();
+
+	siren.transform.M[12] += siren_offset.getX();
+	siren.transform.M[13] += siren_offset.getY();
+	siren.transform.M[14] += siren_offset.getZ();
+
+	siren2.transform.M[12] += siren2_offset.getX();
+	siren2.transform.M[13] += siren2_offset.getY();
+	siren2.transform.M[14] += siren2_offset.getZ();
 
 	cabin.transform.M[12] += cabin_offset.getX();
 	cabin.transform.M[13] += cabin_offset.getY();
@@ -137,16 +157,18 @@ void PhysVehicle3D::Render()
 	backheadlight2.transform.M[13] += backheadlight2_offset.getY();
 	backheadlight2.transform.M[14] += backheadlight2_offset.getZ();
 
-	chassis.color = Red;
-	cabin.color = Red;
+	chassis.color = Blue;
+	cabin.color = Black;
 	headlight.color = Yellow;
 	headlight2.color = Yellow;
 	backheadlight.color = Yellow;
 	backheadlight2.color = Yellow;
-	stickRightDown.color = Red;
-	stickRightUp.color = Red;
-	stickLeftDown.color = Red;
-	stickLeftUp.color = Red;
+	stickRightDown.color = Black;
+	stickRightUp.color = Black;
+	stickLeftDown.color = Black;
+	stickLeftUp.color = Black;
+	siren.color = Red;
+	siren2.color = Blue;
 
 	chassis.Render();
 	cabin.Render();
@@ -159,6 +181,8 @@ void PhysVehicle3D::Render()
 	stickRightUp.Render();
 	stickLeftDown.Render();
 	stickLeftUp.Render();
+	siren.Render();
+	siren2.Render();
 }
 
 // ----------------------------------------------------------------------------

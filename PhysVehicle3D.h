@@ -45,6 +45,11 @@ struct VehicleInfo
 	vec3 backheadlight2_size;
 	vec3 backheadlight2_offset;
 
+	vec3 siren2_size;
+	vec3 siren2_offset;
+	vec3 siren_size;
+	vec3 siren_offset;
+
 	float mass;
 	float suspensionStiffness; // default to 5.88 / 10.0 offroad / 50.0 sports car / 200.0 F1 car
 	float suspensionCompression; // default to 0.83

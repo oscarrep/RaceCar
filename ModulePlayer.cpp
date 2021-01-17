@@ -44,6 +44,10 @@ bool ModulePlayer::Start()
 	car.stickRightDown_offset.Set(-1.38, 3.09, -2.88);
 	car.stickRightUp_size.Set(0.25, 1.7, 0.25);
 	car.stickRightUp_offset.Set(-1.38, 3.09, -0.12);
+	car.siren_size.Set(1, 0.5, 0.5);
+	car.siren_offset.Set(0.5, 4.25, -1);
+	car.siren2_size.Set(1, 0.5, 0.5);
+	car.siren2_offset.Set(-0.5, 4.25, -1);
 	car.mass = 500.0f;
 	car.suspensionStiffness = 15.88f;
 	car.suspensionCompression = 0.83f;
@@ -220,6 +224,8 @@ void ModulePlayer::GameWin()
 void ModulePlayer::UI(int reset)
 {
 	char title[80];
+
+	//clues activate when player stays in a level for an excessive amount of time
 
 	switch (reset)
 	{
