@@ -60,8 +60,9 @@ public:
 	PhysBody3D* pb_wheel2;
 	Cylinder p_wheel2;
 
-	PhysBody3D* pb_chain[5];
-	Sphere chain[5];
+	Sphere chain;
+	Cube leftstick, rightstick, pole;
+	PhysBody3D* pb_chain, * pb_leftstick, * pb_rightstick, * pb_pole;
 
 	PhysMotor3D* left_wheel;
 	PhysMotor3D* right_wheel;

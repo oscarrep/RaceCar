@@ -20,6 +20,8 @@ public:
 	void SetTransform(const float* matrix) const;
 	void SetPos(float x, float y, float z);
 	void SetAsSensor(bool is_sensor);
+	void SetAngularVelocity(float x, float y, float z);
+
 	btRigidBody* GetBody();
 	vec3 GetPos() const;
 private:

@@ -71,3 +71,8 @@ vec3 PhysBody3D::GetPos() const
 	vec3 position(t.getOrigin().getX(), t.getOrigin().getY(), t.getOrigin().getZ());
 	return position;
 }
+
+void PhysBody3D::SetAngularVelocity(float x, float y, float z)
+{
+	body->SetAngularVelocity(btVector3(x, y, z));
+}
