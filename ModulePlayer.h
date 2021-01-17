@@ -19,7 +19,7 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 	float ShowTime();
-	void Restart();
+	void Restart(int map);
 	void GameWin();
 	void UI(bool reset);
 	void SetScore();
@@ -37,5 +37,7 @@ public:
 
 	bool controls = true;
 	bool reset = false;
+
+	int Nmap = 0;
 
 };

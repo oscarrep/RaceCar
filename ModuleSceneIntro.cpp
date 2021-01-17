@@ -27,22 +27,86 @@ bool ModuleSceneIntro::Start()
 	{
 		//1 = create path //2 = create path limit
 		//3 = create flag //4 = create slider //5 = create obstacle
-		2,2,2,8,2,2,2,
+		2,2,2,2,2,2,2,
+		2,2,2,1,2,2,2,
 		2,2,1,1,1,2,2,
+		2,2,1,7,1,2,2,
+		2,2,1,2,1,2,2,
+		2,2,5,2,5,2,2,
+		2,2,1,2,1,2,2,
 		2,2,1,1,1,2,2,
+		2,2,2,9,2,2,2,
+		2,2,2,2,2,2,2,
+	};
+
+	int circuit2[70]{
+		2,2,2,2,2,2,2,
+		2,2,2,1,2,2,2,
 		2,2,1,1,1,2,2,
+		2,2,1,7,1,2,2,
+		2,2,6,2,1,2,2,
+		2,2,5,2,5,2,2,
+		2,2,1,2,1,2,2,
+		2,2,1,1,1,2,2,
+		2,2,2,9,2,2,2,
+		2,2,2,2,2,2,2,
+	};
+
+	int circuit3[70]{
+		2,2,2,2,2,2,2,
+		2,2,2,1,2,2,2,
+		2,2,1,1,1,2,2,
+		2,2,1,7,1,2,2,
 		2,2,6,7,6,2,2,
 		2,2,5,7,5,2,2,
-		2,2,1,4,1,2,2,
 		2,2,1,7,1,2,2,
-		2,2,1,5,1,2,2,
-		2,2,2,1,2,2,2,
+		2,2,1,1,1,2,2,
+		2,2,2,9,2,2,2,
+		2,2,2,2,2,2,2,
 	};
-	//load circuit1, only for 7-column circuits
+
+	int circuit4[70]{
+		2,2,2,2,2,2,2,
+		2,2,2,1,2,2,2,
+		2,2,1,1,1,2,2,
+		2,7,1,2,1,7,2,
+		2,7,6,2,6,7,2,
+		2,7,5,2,5,7,2,
+		2,2,1,2,1,2,2,
+		2,2,1,1,1,2,2,
+		2,2,2,9,2,2,2,
+		2,2,2,2,2,2,2,
+	};
+
+	int circuit5[70]{
+		2,2,2,2,2,2,2,
+		2,2,2,1,2,2,2,
+		2,2,1,1,1,2,2,
+		2,2,1,2,1,2,2,
+		2,2,6,2,6,2,2,
+		2,2,5,2,5,2,2,
+		2,2,1,2,1,2,2,
+		2,2,1,1,1,2,2,
+		2,2,2,8,2,2,2,
+		2,2,2,2,2,2,2,
+	};
+
+	//load circuit, only for 7-column circuits
 	for (int i = 0; i < 5; ++i)
 	{
-		LoadCircuit(circuit, circuit1, i);
+		if (i == 0)
+			LoadCircuit(circuit, circuit5, i);
+		if (i == 1)
+			LoadCircuit(circuit, circuit2, i);
+		if (i == 2)
+			LoadCircuit(circuit, circuit3, i);
+		if (i == 3)
+			LoadCircuit(circuit, circuit4, i);
+		if (i == 4)
+			LoadCircuit(circuit, circuit5, i);
+
 	}
+
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
@@ -103,18 +167,31 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			App->player->reset = true;
 			App->player->Stop();
 		}
-	}
+		if (reset.Read() >= 5000)
+		{
+			App->player->GameWin();
+		}
 
-	if (reset.Read() >= 5000)
-	{
-		App->player->GameWin();
 	}
 
 	for (int i = 0; i < s_limits.Count(); i++)
 	{
-		if ((body1 == pb_limits[i]) && (body2 == (PhysBody3D*)App->player->vehicle) || (body2 == pb_limits[i]) && (body2 == (PhysBody3D*)App->player->vehicle))
+		if ((body1 == pb_limits[i]) && (body2 == (PhysBody3D*)App->player->vehicle) || (body2 == pb_limits[i]) && (body1 == (PhysBody3D*)App->player->vehicle))
 		{
-			App->player->Restart();
+			App->player->Restart(App->player->Nmap);
+		}
+	}
+
+	for (int i = 0; i < s_endlvl.Count(); i++)
+	{
+		if ((body1 == pb_endlvl[i]) && (body2 == (PhysBody3D*)App->player->vehicle) || (body2 == pb_endlvl[i]) && (body1 == (PhysBody3D*)App->player->vehicle))
+		{
+			if (count == 0)
+			{
+				App->player->Nmap++;
+				App->player->Restart(App->player->Nmap);
+				count++;
+			}
 		}
 	}
 
@@ -139,6 +216,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube->painting = true;
 		pb_cubes.PushBack(pb_cube);
 		break;
+
 	case 2:
 		//Limit
 		cubes2.Size(scale.x, scale.y, scale.z);
@@ -147,6 +225,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube2->SetPos(posX, 1, posZ);
 		pb_limits.PushBack(pb_cube2);
 		break;
+
 	case 3:
 		//flag
 		/*cubes2.Size(scale.x, scale.y, scale.z);
@@ -156,6 +235,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cubes.PushBack(pb_cube2);*/
 		LOG("%i, %i", posX, posZ);
 		break;
+
 	case 4:
 		//Floor
 		cubes.Size(scale.x, scale.y, scale.z);
@@ -178,6 +258,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube->painting = true;
 		pb_cubes.PushBack(pb_cube);
 		break;
+
 	case 5:
 		//Floor
 		cubes.Size(scale.x, scale.y, scale.z);
@@ -194,6 +275,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube->SetPos(posX, 3, posZ);
 		pb_cubes.PushBack(pb_cube);
 		break;
+
 	case 6:
 		//floor
 		cubes.Size(scale.x, scale.y, scale.z);
@@ -209,6 +291,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube2->SetPos(posX, 1.1, posZ);
 		pb_limits.PushBack(pb_cube2);
 		break;
+
 	case 7:
 		//invisible floor
 		cubes.Size(scale.x, scale.y, scale.z);
@@ -218,6 +301,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube->painting = false;
 		pb_cubes.PushBack(pb_cube);
 		break;
+
 	case 8:
 		//floor
 		cubes.Size(scale.x, scale.y, scale.z);
@@ -226,6 +310,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube->SetPos(posX, 1, posZ);
 		pb_cube->painting = true;
 		pb_cubes.PushBack(pb_cube);
+		App->player->Nmap=0;
 
 		//victory sensor
 		sensor_victory.Size(30, 1, 15);
@@ -234,14 +319,24 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_victory->GetTransform(&sensor_victory.transform);
 		pb_victory->SetAsSensor(true);
 		pb_victory->collision_listeners.add(this);
+		break;
+
 	case 9:
-		cubes.Size(2, 80, 2);
+		//floor
+		cubes.Size(scale.x, scale.y, scale.z);
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
-		pb_cube->SetPos(posX, 3, posZ);
+		pb_cube->SetPos(posX, 1, posZ);
 		pb_cube->painting = true;
-		pb_cube->SetAngularVelocity(2000, 0, 0);
+		//pb_cube->SetAngularVelocity(2000, 0, 0);
 		pb_cubes.PushBack(pb_cube);
+
+		//change lvl
+		cubes2.Size(scale.x, scale.y, scale.z);
+		s_endlvl.PushBack(cubes2);
+		pb_cube2 = App->physics->AddBody(cubes2, 0);
+		pb_cube2->SetPos(posX, 3, posZ);
+		pb_endlvl.PushBack(pb_cube2);
 		break;
 	}
 
@@ -297,24 +392,38 @@ int ModuleSceneIntro::Size(int* vec)
 }
 
 void ModuleSceneIntro::LoadCircuit(int* lvlcircuit, int* circuitx, int poscircuit)
-{
+{	
+	// distance between circuits
 	int desp = poscircuit * 8 * 30;
+	
+	//choosing the right circuit
 	for (int i = 0; i < Size(circuitx); ++i)
 	{
 		lvlcircuit[i] = circuitx[i];
 	}
-	for (int j = 0; j < 10; j++) {
-		for (int i = 0; i < 7; i++) {
+	
+	//create map
+	for (int j = 0; j < 10; j++) 
+	{
+		for (int i = 0; i < 7; i++) 
+		{
 			CreateFloor(vec3(30, 1, 30), 30 * i + desp, 30 * j, circuit[(7 * j) + i]);
 		}
 	}
 
+	//create sensors
 	if (pb_limits.Count() != 0 && s_limits.Count() != 0 && s_limits.Count() == pb_limits.Count())
 	{
 		for (int i = 0; i < s_limits.Count(); i++)
 		{
 			pb_limits[i]->SetAsSensor(true);
 			pb_limits[i]->collision_listeners.add(this);
+		}
+
+		for (int i = 0; i < s_endlvl.Count(); i++)
+		{
+			pb_endlvl[i]->SetAsSensor(true);
+			pb_endlvl[i]->collision_listeners.add(this);
 		}
 	}
 }

@@ -70,8 +70,13 @@ public:
 	PhysBody3D* pb_victory;
 	Cube sensor_victory;
 
+	p2DynArray<PhysBody3D*> pb_endlvl;
+	p2DynArray<Cube>s_endlvl;
+
 	Timer reset;
 	bool win = true;
+
+	int count = 0;
 
 	int circuit[MAX_CIRCUITSIZE];
 
