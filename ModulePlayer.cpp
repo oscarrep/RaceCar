@@ -198,7 +198,7 @@ void ModulePlayer::Restart(int map)
 		if (App->scene_intro->circuit[i] == 1)
 		{
 			int j = i / 7 * 30;
-			int q = i % (7 * 30) + map*(8*30);
+			int q = (i % 7 * 30) + map*(8*30);
 			vehicle->SetPos(q, 2, j);
 			break;
 		}

@@ -42,6 +42,9 @@ public:
 	Sphere s_snake2[MAX_SNAKE];
 	*/
 
+	PhysBody3D* pb_slider;
+	Cube* slid = new Cube(30, 8, 1);
+
 	p2DynArray<PhysBody3D*> pb_cubes;
 	p2DynArray<Cube>s_cubes;
 	
@@ -75,7 +78,11 @@ public:
 
 	Timer reset;
 	bool win = true;
+	bool first = true;
+	bool move = true;
 
+	int count2 = 0;
+	int count3 = 0;
 	int count = 0;
 
 	int circuit[MAX_CIRCUITSIZE];
