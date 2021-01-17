@@ -40,6 +40,10 @@ struct VehicleInfo
 	vec3 stickRightDown_offset;
 	vec3 stickRightUp_size;
 	vec3 stickRightUp_offset;
+	vec3 backheadlight_size;
+	vec3 backheadlight_offset;
+	vec3 backheadlight2_size;
+	vec3 backheadlight2_offset;
 
 	float mass;
 	float suspensionStiffness; // default to 5.88 / 10.0 offroad / 50.0 sports car / 200.0 F1 car
@@ -65,8 +69,14 @@ public:
 	void Brake(float force);
 	void Turn(float degrees);
 	float GetKmh() const;
+
 public:
 
 	VehicleInfo info;
 	btRaycastVehicle* vehicle;
+
+	/*Cube lamps;
+	Cube lamps2;
+	Cube lamps3;
+	Cube lamps4;*/
 };

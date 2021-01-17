@@ -29,7 +29,7 @@ bool ModuleSceneIntro::Start()
 		//3 = create flag //4 = create slider //5 = create obstacle
 		2,2,2,2,2,2,2,
 		2,2,2,1,2,2,2,
-		2,2,1,1,1,2,2,
+		2,2,1,10,1,2,2,
 		2,2,1,7,1,2,2,
 		2,2,1,2,1,2,2,
 		2,2,5,2,5,2,2,
@@ -95,7 +95,7 @@ bool ModuleSceneIntro::Start()
 	for (int i = 0; i < 5; ++i)
 	{
 		if (i == 0)
-			LoadCircuit(circuit, circuit5, i);
+			LoadCircuit(circuit, circuit1, i);
 		if (i == 1)
 			LoadCircuit(circuit, circuit2, i);
 		if (i == 2)
@@ -338,8 +338,29 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube2->SetPos(posX, 3, posZ);
 		pb_endlvl.PushBack(pb_cube2);
 		break;
+
+	case 10:
+		//ramp
+		cubes.Size(scale.x, scale.y, scale.z - 15);
+		cubes.SetRotation(-15, vec3(1, 0, 0));
+		s_cubes.PushBack(cubes);
+		pb_cube = App->physics->AddBody(cubes, 0);
+		pb_cube->SetPos(posX, 3, posZ - 10);
+		pb_cube->painting = true;
+		pb_cubes.PushBack(pb_cube);
+		break;
 	}
 
+}
+
+int ModuleSceneIntro::Size(int* vec)
+{
+	int count = 0;
+	for (int i = 0; vec[i] <= 10 && vec[i] >= 1; ++i)
+	{
+		count++;
+	}
+	return count;
 }
 
 void ModuleSceneIntro::Painting()
@@ -379,16 +400,6 @@ void ModuleSceneIntro::Painting()
 
 	delete floor_cube;
 	floor_cube = nullptr;
-}
-
-int ModuleSceneIntro::Size(int* vec)
-{
-	int count = 0;
-	for (int i = 0; vec[i] <= 9 && vec[i] >= 1; ++i)
-	{
-		count++;
-	}
-	return count;
 }
 
 void ModuleSceneIntro::LoadCircuit(int* lvlcircuit, int* circuitx, int poscircuit)

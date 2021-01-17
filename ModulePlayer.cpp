@@ -32,6 +32,10 @@ bool ModulePlayer::Start()
 	car.headlight_offset.Set(1, 1.5, 3);
 	car.headlight2_size.Set(0.5, 0.5, 0.5);
 	car.headlight2_offset.Set(-1, 1.5, 3);
+	car.backheadlight_size.Set(0.5, 0.5, 0.5);
+	car.backheadlight_offset.Set(1, 1.5, -3);
+	car.backheadlight2_size.Set(0.5, 0.5, 0.5);
+	car.backheadlight2_offset.Set(-1, 1.5, -3);
 	car.stickLeftDown_size.Set(0.25, 1.7, 0.25);
 	car.stickLeftDown_offset.Set(1.38, 3.09, -2.88);
 	car.stickLeftUp_size.Set(0.25, 1.7, 0.25);

@@ -60,6 +60,12 @@ void PhysVehicle3D::Render()
 	Cube stickRightDown(info.stickRightDown_size.x, info.stickRightDown_size.y, info.stickRightDown_size.z);
 	vehicle->getChassisWorldTransform().getOpenGLMatrix(&stickRightDown.transform);
 
+	Cube backheadlight(info.backheadlight_size.x, info.backheadlight_size.y, info.backheadlight_size.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&backheadlight.transform);
+
+	Cube backheadlight2(info.backheadlight2_size.x, info.backheadlight2_size.y, info.backheadlight2_size.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&backheadlight2.transform);
+
 	btQuaternion q = vehicle->getChassisWorldTransform().getRotation();
 	btVector3 offset(info.chassis_offset.x, info.chassis_offset.y, info.chassis_offset.z);
 	offset = offset.rotate(q.getAxis(), q.getAngle());
@@ -84,6 +90,12 @@ void PhysVehicle3D::Render()
 
 	btVector3 stickRightUp_offset(info.stickRightUp_offset.x, info.stickRightUp_offset.y, info.stickRightUp_offset.z);
 	stickRightUp_offset = stickRightUp_offset.rotate(q.getAxis(), q.getAngle());
+
+	btVector3 backheadlight_offset(info.backheadlight_offset.x, info.backheadlight_offset.y, info.backheadlight_offset.z);
+	backheadlight_offset = backheadlight_offset.rotate(q.getAxis(), q.getAngle());
+
+	btVector3 backheadlight2_offset(info.backheadlight2_offset.x, info.backheadlight2_offset.y, info.backheadlight2_offset.z);
+	backheadlight2_offset = backheadlight2_offset.rotate(q.getAxis(), q.getAngle());
 
 	chassis.transform.M[12] += offset.getX();
 	chassis.transform.M[13] += offset.getY();
@@ -117,11 +129,20 @@ void PhysVehicle3D::Render()
 	stickRightDown.transform.M[13] += stickRightDown_offset.getY();
 	stickRightDown.transform.M[14] += stickRightDown_offset.getZ();
 
+	backheadlight.transform.M[12] += backheadlight_offset.getX();
+	backheadlight.transform.M[13] += backheadlight_offset.getY();
+	backheadlight.transform.M[14] += backheadlight_offset.getZ();
+
+	backheadlight2.transform.M[12] += backheadlight2_offset.getX();
+	backheadlight2.transform.M[13] += backheadlight2_offset.getY();
+	backheadlight2.transform.M[14] += backheadlight2_offset.getZ();
 
 	chassis.color = Red;
 	cabin.color = Red;
 	headlight.color = Yellow;
 	headlight2.color = Yellow;
+	backheadlight.color = Yellow;
+	backheadlight2.color = Yellow;
 	stickRightDown.color = Red;
 	stickRightUp.color = Red;
 	stickLeftDown.color = Red;
@@ -130,6 +151,9 @@ void PhysVehicle3D::Render()
 	chassis.Render();
 	cabin.Render();
 	headlight.Render();
+	headlight2.Render();
+	backheadlight.Render();
+	backheadlight2.Render();
 	headlight2.Render();
 	stickRightDown.Render();
 	stickRightUp.Render();
