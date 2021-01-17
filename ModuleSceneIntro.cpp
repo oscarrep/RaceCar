@@ -41,8 +41,8 @@ bool ModuleSceneIntro::Start()
 
 	if (pb_limits.Count() != 0 && s_limits.Count() != 0 && s_limits.Count() == pb_limits.Count())
 	{
-		for (int i = 0; i < s_limits.Count(); i++) {
-			/*pb_limits[i]->GetTransform(&s_limits[i].transform);*/
+		for (int i = 0; i < s_limits.Count(); i++) 
+		{
 			pb_limits[i]->SetAsSensor(true);
 			pb_limits[i]->collision_listeners.add(this);
 		}
@@ -151,6 +151,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
 		pb_cube->SetPos(posX, 1, posZ);
+		pb_cube->painting = true;
 		pb_cubes.PushBack(pb_cube);
 		break;
 	case 2:
@@ -187,6 +188,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 
 		pb_cube->SetPos(posX, 14.5, posZ);
 		App->physics->AddConstraintSlider(*pb_cube, false);
+		pb_cube->painting = true;
 		pb_cubes.PushBack(pb_cube);
 		break;
 	case 5:
@@ -220,7 +222,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_limits.PushBack(pb_cube2);
 		break;
 	case 7:
-		//ivisible floor
+		//invisible floor
 		cubes.Size(scale.x, scale.y, scale.z);
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
@@ -242,7 +244,7 @@ void ModuleSceneIntro::Painting()
 	{
 		for (int i = 0; i < s_cubes.Count(); i++) {
 			pb_cubes[i]->GetTransform(&s_cubes[i].transform);
-			//if (pb_cubes[i]->painting == true)
+			if (pb_cubes[i]->painting == true)
 				s_cubes[i].Render();
 		}
 
@@ -263,6 +265,7 @@ void ModuleSceneIntro::Painting()
 		pb_chain[i]->GetTransform(&(chain[i].transform));
 		chain[i].Render();
 	}*/
+	delete floor_cube;
 }
 
 int ModuleSceneIntro::Size(int* vec)

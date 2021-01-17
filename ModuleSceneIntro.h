@@ -48,8 +48,8 @@ public:
 	p2DynArray<PhysBody3D*> pb_limits;
 	p2DynArray<Cube>s_limits;
 
-	//PhysBody3D* pb_cube[5];
-	//Cube s_cube[5];
+	PhysBody3D* pb_cube[5];
+	Cube s_cube[5];
 
 	PhysBody3D* pb_chassis;
 	Cube p_chassis;
