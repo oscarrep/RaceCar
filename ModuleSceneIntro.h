@@ -10,7 +10,8 @@
 struct PhysBody3D;
 struct PhysMotor3D;
 
-enum FLOOR_TYPE {
+enum FLOOR_TYPE 
+{
 	TOP_FLOOR,
 	BOTTOM_FLOOR,
 	WALL,
@@ -77,6 +78,7 @@ public:
 	p2DynArray<Cube>s_endlvl;
 
 	Timer reset;
+	Timer lvltime;
 	bool win = true;
 	bool first = true;
 	bool move = true;

@@ -210,22 +210,75 @@ void ModulePlayer::GameWin()
 	SetScore();
 	Restart(Nmap);
 	playerTime.Start();
+	App->scene_intro->lvltime.Start();
+	App->player->clue = false;
 	App->scene_intro->win = true;
 	controls = true;
-	reset = false;
+	reset = 0;
 }
 
-void ModulePlayer::UI(bool reset)
+void ModulePlayer::UI(int reset)
 {
 	char title[80];
 
-	if (!reset)
+	switch (reset)
 	{
-		sprintf_s(title, "%.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
-	}
-	if (reset)
-	{
-		sprintf_s(title, "YOU WON! Your Time: %.0f Best Time: %.0f", ShowTime(), bestTime);
+	case 0:
+		if (clue == true)
+		{
+			sprintf_s(title, "Do you need help? Try jumping over that green thing");
+		}
+		else
+		{
+			sprintf_s(title, "LEVEL 1 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+		}
+
+		break;
+	case 1:
+		if (clue == true)
+		{
+			sprintf_s(title, "Do you need help? Try jumping over that green thing");
+		}
+		else
+		{
+			sprintf_s(title, "LEVEL 2 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+		}
+		break;
+	case 2:
+		if (clue == true)
+		{
+			sprintf_s(title, "Do you need help? Try jumping over that green thing");
+		}
+		else
+		{
+			sprintf_s(title, "LEVEL 3 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+		}
+		break;
+	case 3:
+		if (clue == true)
+		{
+			sprintf_s(title, "Do you need help? Try jumping over that green thing");
+		}
+		else
+		{
+			sprintf_s(title, "LEVEL 4 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+		}
+		break;
+	case 4:
+		if (clue == true)
+		{
+			sprintf_s(title, "Do you need help? Try jumping over that green thing");
+		}
+		else
+		{
+			sprintf_s(title, "LEVEL 5 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+		}
+		break;
+	case 5:
+		sprintf_s(title, "YOU'VE WON! Your Time: %.0f Best Time: %.0f", ShowTime(), bestTime);
+		break;
+	default:
+		break;
 	}
 
 	App->window->SetTitle(title);
