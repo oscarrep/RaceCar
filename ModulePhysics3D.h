@@ -48,6 +48,8 @@ private:
 	btDefaultVehicleRaycaster*			vehicle_raycaster;
 	DebugDrawer*						debug_draw;
 
+public:
+
 	p2List<btCollisionShape*> shapes;
 	p2List<PhysBody3D*> bodies;
 	p2List<btDefaultMotionState*> motions;

@@ -31,7 +31,7 @@ public:
 	void CreateFloor(vec3 scale, int posX, int posZ, int cir);
 	void Painting();
 	int Size(int* vec);
-	void LoadCircuit(int* lvlcircuit, int* circuitx);
+	void LoadCircuit(int* lvlcircuit, int* circuitx, int poscircuit);
 
 public:
 	/*

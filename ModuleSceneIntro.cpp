@@ -21,14 +21,14 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 	App->audio->PlayMusic("audio/bushweek.ogg");
-	Mix_VolumeMusic(50);
+	Mix_VolumeMusic(10);
 
 	int circuit1[70]
 	{
 		//1 = create path //2 = create path limit
 		//3 = create flag //4 = create slider //5 = create obstacle
+		2,2,2,8,2,2,2,
 		2,2,2,1,2,2,2,
-		2,2,2,7,2,2,2,
 		2,2,2,1,2,2,2,
 		2,2,1,1,1,2,2,
 		2,2,1,7,6,2,2,
@@ -36,11 +36,13 @@ bool ModuleSceneIntro::Start()
 		2,2,1,7,1,2,2,
 		2,2,1,7,1,2,2,
 		2,2,1,5,1,2,2,
-		2,2,2,8,2,2,2,
+		2,2,2,1,2,2,2,
 	};
 	//load circuit1, only for 7-column circuits
-	LoadCircuit(circuit, circuit1);
-
+	for (int i = 0; i < 5; ++i)
+	{
+		LoadCircuit(circuit, circuit1, i);
+	}
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 
@@ -269,15 +271,16 @@ int ModuleSceneIntro::Size(int* vec)
 	return count;
 }
 
-void ModuleSceneIntro::LoadCircuit(int* lvlcircuit, int* circuitx)
+void ModuleSceneIntro::LoadCircuit(int* lvlcircuit, int* circuitx, int poscircuit)
 {
+	int desp = poscircuit * 8 * 30;
 	for (int i = 0; i < Size(circuitx); ++i)
 	{
 		lvlcircuit[i] = circuitx[i];
 	}
 	for (int j = 0; j < 10; j++) {
 		for (int i = 0; i < 7; i++) {
-			CreateFloor(vec3(30, 1, 30), 30 * i, 30 * j, circuit[(7 * j) + i]);
+			CreateFloor(vec3(30, 1, 30), 30 * i + desp, 30 * j, circuit[(7 * j) + i]);
 		}
 	}
 
