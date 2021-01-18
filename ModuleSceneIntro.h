@@ -76,9 +76,12 @@ public:
 
 	Timer reset;
 	Timer lvltime;
+	Timer timetrial;
+
 	bool win = true;
 	bool first = true;
 	bool move = true;
+	bool run = true;
 	
 	int count = 0;
 	int count2 = 0;
