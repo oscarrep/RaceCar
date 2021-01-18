@@ -31,6 +31,8 @@ bool ModuleSceneIntro::Start()
 	//5 = obstacle		 //6 = trap
 	//7 = invisible road //8 = win condition
 	//9 = change lvl	 //10 = ramp
+	//11 = big wall		 //12 = end ramp 
+	//13 = clued path
 	
 	int circuit0[70]
 	{
@@ -65,7 +67,7 @@ bool ModuleSceneIntro::Start()
 		2,2,2,2,2,2,2,
 		2,2,2,1,2,2,2,
 		2,2,1,1,1,2,2,
-		2,2,1,7,1,2,2,
+		2,2,1,1,1,2,2,
 		11,2,6,2,1,2,2,
 		2,2,5,2,5,2,2,
 		2,2,1,2,1,2,2,
@@ -112,12 +114,40 @@ bool ModuleSceneIntro::Start()
 		2,1,1,1,1,1,2,
 		2,2,2,2,2,1,2,
 		2,2,1,1,1,1,2,
-		2,8,1,2,2,2,2,
+		2,9,1,2,2,2,2,
+		2,2,2,2,2,2,2,
+	};
+
+	int circuit6[70]
+	{
+		2,2,2,9,2,2,2,
+		2,2,2,1,2,2,2,
+		2,2,2,6,2,2,2,
+		2,2,2,6,2,2,2,
+		11,2,2,6,2,2,2,
+		2,2,2,6,2,2,2,
+		2,2,2,6,2,2,2,
+		2,2,2,6,2,2,2,
+		2,2,2,6,2,2,2,
+		2,2,2,2,2,2,2,
+	};
+
+	int circuit7[70]
+	{
+		2,2,2,2,2,2,2,
+		2,6,6,1,6,6,2,
+		2,1,1,1,1,6,2,
+		2,6,6,6,1,6,2,
+		11,6,1,1,1,6,2,
+		2,6,1,6,6,6,2,
+		2,6,1,1,6,6,2,
+		2,6,6,1,6,6,2,
+		2,8,1,1,6,6,2,
 		2,2,2,2,2,2,2,
 	};
 
 	//load circuit, only for 7-column circuits
-	for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < 8; ++i)
 	{
 		if (i == 0) LoadCircuit(circuit, circuit0, i);
 		else if (i == 1) LoadCircuit(circuit, circuit1, i);
@@ -125,6 +155,8 @@ bool ModuleSceneIntro::Start()
 		else if (i == 3) LoadCircuit(circuit, circuit3, i);
 		else if (i == 4) LoadCircuit(circuit, circuit4, i);
 		else if (i == 5) LoadCircuit(circuit, circuit5, i);
+		else if (i == 6) LoadCircuit(circuit, circuit6, i);
+		else if (i == 7) LoadCircuit(circuit, circuit7, i);
 
 	}
 
@@ -407,7 +439,7 @@ int ModuleSceneIntro::Size(int* vec)
 
 void ModuleSceneIntro::Painting()
 {
-	Cube* floor_cube = new Cube(5000.0f, 0.0f, 5000.0f);
+	Cube* floor_cube = new Cube(5000.0f, 0.0f, 800.0f);
 	floor_cube->color = Green;
 	floor_cube->Render();
 

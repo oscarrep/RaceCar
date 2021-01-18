@@ -49,7 +49,7 @@ bool ModulePlayer::Start()
 	car->mass = 500.0f;
 	car->suspensionStiffness = 15.88f;
 	car->suspensionCompression = 0.83f;
-	car->suspensionDamping = 0.88f;
+	car->suspensionDamping = 10.88f;
 	car->maxSuspensionTravelCm = 1000.0f;
 	car->frictionSlip = 50.5;
 	car->maxSuspensionForce = 6000.0f;
@@ -218,69 +218,50 @@ void ModulePlayer::UI(int reset)
 	switch (reset)
 	{
 	case 0:
-		if (clue == true)
-		{
-			sprintf_s(title, "Do you need help? Try jumping over that green thing");
-		}
-		else
-		{
-			sprintf_s(title, "LEVEL 0 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
-		}
+		if (clue == true) sprintf_s(title, "Really?");
+		else sprintf_s(title, "LEVEL 0 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+
 		break;
 
 	case 1:
-		if (clue == true)
-		{
-			sprintf_s(title, "Do you need help? Try jumping over that green thing");
-		}
-		else
-		{
-			sprintf_s(title, "LEVEL 1 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
-		}
+		if (clue == true) sprintf_s(title, "Maybe try jumping over the green thing");
+		else sprintf_s(title, "LEVEL 1 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
 
 		break;
+
 	case 2:
-		if (clue == true)
-		{
-			sprintf_s(title, "Do you need help? Try jumping over that green thing");
-		}
-		else
-		{
-			sprintf_s(title, "LEVEL 2 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
-		}
+		if (clue == true) sprintf_s(title, "Something is not RIGHT");
+		else sprintf_s(title, "LEVEL 2 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+		
 		break;
+
 	case 3:
-		if (clue == true)
-		{
-			sprintf_s(title, "Have you tried driving in the middle?");
-		}
-		else
-		{
-			sprintf_s(title, "LEVEL 3 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
-		}
+		if (clue == true) sprintf_s(title, "You could just drive through the middle");
+		else sprintf_s(title, "LEVEL 3 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+		
 		break;
+
 	case 4:
-		if (clue == true)
-		{
-			sprintf_s(title, "Try to think outside the box");
-		}
-		else
-		{
-			sprintf_s(title, "LEVEL 4 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
-		}
+		if (clue == true) sprintf_s(title, "Try thinking outside the box");
+		else sprintf_s(title, "LEVEL 4 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+
 		break;
+
 	case 5:
-		if (clue == true)
-		{
-			sprintf_s(title, "Do you need help? Try jumping over that green thing");
-		}
-		else
-		{
-			sprintf_s(title, "LEVEL 5 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
-		}
+		if (clue == true) sprintf_s(title, "Just drive to the yellow square..");
+		else sprintf_s(title, "LEVEL 5 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+		
 		break;
+	
+	case 6:
+		if (clue == true) sprintf_s(title, "Oh shit, behind you!");
+		else sprintf_s(title, "LEVEL 6 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+
+		break;
+
 	case 10:
-		sprintf_s(title, "YOU'VE WON! Your Time: %.0f Best Time: %.0f", ShowTime(), bestTime);
+		sprintf_s(title, "Congrats, you win. Your Time: %.0f Best Time: %.0f", ShowTime(), bestTime);
+		
 		break;
 	default:
 		break;
@@ -291,16 +272,9 @@ void ModulePlayer::UI(int reset)
 
 void ModulePlayer::SetScore()
 {
-	if (bestTime == 0)
-	{
-		bestTime = ShowTime();
-	}
-	if (ShowTime() < bestTime)
-	{
-		bestTime = ShowTime();
-	}
+	if (bestTime == 0) bestTime = ShowTime();
+	if (ShowTime() < bestTime) bestTime = ShowTime();
 }
-
 void ModulePlayer::Stop()
 {
 	vehicle->GetBody()->setAngularVelocity({ 0, 0, 0 });
@@ -344,9 +318,7 @@ void ModulePlayer::Control()
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && controls)
-	{
 		brake = BRAKE_POWER;
-	}
 
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
@@ -354,10 +326,8 @@ void ModulePlayer::Control()
 		Restart(Nmap);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN && controls)
-	{
-		emergency = !emergency;
-	}
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN && controls) emergency = !emergency;
+
 
 	if (App->input->GetKey(SDL_SCANCODE_0) == KEY_REPEAT && controls)	App->scene_intro->LevelSelector(0);
 	else if (App->input->GetKey(SDL_SCANCODE_1) == KEY_REPEAT && controls)	App->scene_intro->LevelSelector(1);
