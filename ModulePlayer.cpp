@@ -12,49 +12,47 @@ ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, s
 }
 
 ModulePlayer::~ModulePlayer()
-{}
+{
+	if (car != nullptr)
+	{
+		delete car;
+		car = nullptr;
+	}
+}
 
 // Load assets
 bool ModulePlayer::Start()
 {
 	LOG("Loading player");
 
-	VehicleInfo car;
+	car = new VehicleInfo;
 
 	playerTime.Start();
 
 	// Car properties ----------------------------------------
-	car.chassis_size.Set(3, 1.5, 6);
-	car.chassis_offset.Set(0, 1.5, 0);
-	car.cabin_size.Set(3, 0.25, 3);
-	car.cabin_offset.Set(0, 4, -1.5);
-	car.headlight_size.Set(0.5, 0.5, 0.5);
-	car.headlight_offset.Set(1, 1.5, 3);
-	car.headlight2_size.Set(0.5, 0.5, 0.5);
-	car.headlight2_offset.Set(-1, 1.5, 3);
-	car.backheadlight_size.Set(0.5, 0.5, 0.5);
-	car.backheadlight_offset.Set(1, 1.5, -3);
-	car.backheadlight2_size.Set(0.5, 0.5, 0.5);
-	car.backheadlight2_offset.Set(-1, 1.5, -3);
-	car.stickLeftDown_size.Set(0.25, 1.7, 0.25);
-	car.stickLeftDown_offset.Set(1.38, 3.09, -2.88);
-	car.stickLeftUp_size.Set(0.25, 1.7, 0.25);
-	car.stickLeftUp_offset.Set(1.38, 3.09, -0.12);
-	car.stickRightDown_size.Set(0.25, 1.7, 0.25);
-	car.stickRightDown_offset.Set(-1.38, 3.09, -2.88);
-	car.stickRightUp_size.Set(0.25, 1.7, 0.25);
-	car.stickRightUp_offset.Set(-1.38, 3.09, -0.12);
-	car.siren_size.Set(1, 0.5, 0.5);
-	car.siren_offset.Set(0.5, 4.25, -1);
-	car.siren2_size.Set(1, 0.5, 0.5);
-	car.siren2_offset.Set(-0.5, 4.25, -1);
-	car.mass = 500.0f;
-	car.suspensionStiffness = 15.88f;
-	car.suspensionCompression = 0.83f;
-	car.suspensionDamping = 0.88f;
-	car.maxSuspensionTravelCm = 1000.0f;
-	car.frictionSlip = 50.5;
-	car.maxSuspensionForce = 6000.0f;
+	car->chassis_size.Set(3, 1.5, 6);
+	car->chassis_offset.Set(0, 1.5, 0);
+	car->cabin_size.Set(3, 0.25, 3);
+	car->cabin_offset.Set(0, 4, -1.5);
+	car->headlight_size.Set(0.5, 0.5, 0.5);
+	car->headlight_offset.Set(1, 1.5, 3);
+	car->headlight2_size.Set(0.5, 0.5, 0.5);
+	car->headlight2_offset.Set(-1, 1.5, 3);
+	car->stickLeftDown_size.Set(0.25, 1.7, 0.25);
+	car->stickLeftDown_offset.Set(1.38, 3.09, -2.88);
+	car->stickLeftUp_size.Set(0.25, 1.7, 0.25);
+	car->stickLeftUp_offset.Set(1.38, 3.09, -0.12);
+	car->stickRightDown_size.Set(0.25, 1.7, 0.25);
+	car->stickRightDown_offset.Set(-1.38, 3.09, -2.88);
+	car->stickRightUp_size.Set(0.25, 1.7, 0.25);
+	car->stickRightUp_offset.Set(-1.38, 3.09, -0.12);
+	car->mass = 500.0f;
+	car->suspensionStiffness = 15.88f;
+	car->suspensionCompression = 0.83f;
+	car->suspensionDamping = 0.88f;
+	car->maxSuspensionTravelCm = 1000.0f;
+	car->frictionSlip = 50.5;
+	car->maxSuspensionForce = 6000.0f;
 
 	// Wheel properties ---------------------------------------
 	float connection_height = 1.2f;
@@ -64,66 +62,71 @@ bool ModulePlayer::Start()
 
 	// Don't change anything below this line ------------------
 
-	float half_width = car.chassis_size.x*0.5f;
-	float half_length = car.chassis_size.z*0.5f;
+	float half_width = car->chassis_size.x * 0.5f;
+	float half_length = car->chassis_size.z * 0.5f;
 	
 	vec3 direction(0,-1,0);
 	vec3 axis(-1,0,0);
 	
-	car.num_wheels = 4;
-	car.wheels = new Wheel[4];
+	car->num_wheels = 4;
+	car->wheels = new Wheel[car->num_wheels];
 
 	// FRONT-LEFT ------------------------
-	car.wheels[0].connection.Set(half_width - 0.3f * wheel_width, connection_height, half_length - wheel_radius);
-	car.wheels[0].direction = direction;
-	car.wheels[0].axis = axis;
-	car.wheels[0].suspensionRestLength = suspensionRestLength;
-	car.wheels[0].radius = wheel_radius;
-	car.wheels[0].width = wheel_width;
-	car.wheels[0].front = true;
-	car.wheels[0].drive = true;
-	car.wheels[0].brake = false;
-	car.wheels[0].steering = true;
+	car->wheels[0].connection.Set(half_width - 0.3f * wheel_width, connection_height, half_length - wheel_radius);
+	car->wheels[0].direction = direction;
+	car->wheels[0].axis = axis;
+	car->wheels[0].suspensionRestLength = suspensionRestLength;
+	car->wheels[0].radius = wheel_radius;
+	car->wheels[0].width = wheel_width;
+	car->wheels[0].front = true;
+	car->wheels[0].drive = true;
+	car->wheels[0].brake = false;
+	car->wheels[0].steering = true;
 
 	// FRONT-RIGHT ------------------------
-	car.wheels[1].connection.Set(-half_width + 0.3f * wheel_width, connection_height, half_length - wheel_radius);
-	car.wheels[1].direction = direction;
-	car.wheels[1].axis = axis;
-	car.wheels[1].suspensionRestLength = suspensionRestLength;
-	car.wheels[1].radius = wheel_radius;
-	car.wheels[1].width = wheel_width;
-	car.wheels[1].front = true;
-	car.wheels[1].drive = true;
-	car.wheels[1].brake = false;
-	car.wheels[1].steering = true;
+	car->wheels[1].connection.Set(-half_width + 0.3f * wheel_width, connection_height, half_length - wheel_radius);
+	car->wheels[1].direction = direction;
+	car->wheels[1].axis = axis;
+	car->wheels[1].suspensionRestLength = suspensionRestLength;
+	car->wheels[1].radius = wheel_radius;
+	car->wheels[1].width = wheel_width;
+	car->wheels[1].front = true;
+	car->wheels[1].drive = true;
+	car->wheels[1].brake = false;
+	car->wheels[1].steering = true;
 
 	// REAR-LEFT ------------------------
-	car.wheels[2].connection.Set(half_width - 0.3f * wheel_width, connection_height, -half_length + wheel_radius);
-	car.wheels[2].direction = direction;
-	car.wheels[2].axis = axis;
-	car.wheels[2].suspensionRestLength = suspensionRestLength;
-	car.wheels[2].radius = wheel_radius;
-	car.wheels[2].width = wheel_width;
-	car.wheels[2].front = false;
-	car.wheels[2].drive = false;
-	car.wheels[2].brake = true;
-	car.wheels[2].steering = false;
+	car->wheels[2].connection.Set(half_width - 0.3f * wheel_width, connection_height, -half_length + wheel_radius);
+	car->wheels[2].direction = direction;
+	car->wheels[2].axis = axis;
+	car->wheels[2].suspensionRestLength = suspensionRestLength;
+	car->wheels[2].radius = wheel_radius;
+	car->wheels[2].width = wheel_width;
+	car->wheels[2].front = false;
+	car->wheels[2].drive = false;
+	car->wheels[2].brake = true;
+	car->wheels[2].steering = false;
 
 	// REAR-RIGHT ------------------------
-	car.wheels[3].connection.Set(-half_width + 0.3f * wheel_width, connection_height, -half_length + wheel_radius);
-	car.wheels[3].direction = direction;
-	car.wheels[3].axis = axis;
-	car.wheels[3].suspensionRestLength = suspensionRestLength;
-	car.wheels[3].radius = wheel_radius;
-	car.wheels[3].width = wheel_width;
-	car.wheels[3].front = false;
-	car.wheels[3].drive = false;
-	car.wheels[3].brake = true;
-	car.wheels[3].steering = false;
+	car->wheels[3].connection.Set(-half_width + 0.3f * wheel_width, connection_height, -half_length + wheel_radius);
+	car->wheels[3].direction = direction;
+	car->wheels[3].axis = axis;
+	car->wheels[3].suspensionRestLength = suspensionRestLength;
+	car->wheels[3].radius = wheel_radius;
+	car->wheels[3].width = wheel_width;
+	car->wheels[3].front = false;
+	car->wheels[3].drive = false;
+	car->wheels[3].brake = true;
+	car->wheels[3].steering = false;
 
-	vehicle = App->physics->AddVehicle(car);
+	vehicle = App->physics->AddVehicle(*car);
 	vehicle->SetPos(30, 2, 30);
 	Restart(Nmap);
+
+	vehicle->sirens[0].color = Red;
+	vehicle->sirens[1].color = Blue;
+	vehicle->sirens[2].color = Yellow;
+	vehicle->sirens[3].color = Yellow;
 	
 	return true;
 }
@@ -145,10 +148,28 @@ update_status ModulePlayer::Update(float dt)
 	vehicle->ApplyEngineForce(acceleration);
 	vehicle->Turn(turn);
 	vehicle->Brake(brake);
-
 	vehicle->Render();
 	
 	UI(reset);
+
+	if (emergency)
+	{
+		lightCount++;
+		if (lightCount <= 10)
+		{
+			vehicle->sirens[0].color = Blue;
+			vehicle->sirens[1].color = Red;
+		}
+		else if (lightCount >= 11 && lightCount <= 20)
+		{
+			vehicle->sirens[0].color = Red;
+			vehicle->sirens[1].color = Blue;
+		}
+		else
+		{
+			lightCount = 0;
+		}
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -177,6 +198,7 @@ void ModulePlayer::Restart(int map)
 
 void ModulePlayer::GameWin()
 {
+	Mix_VolumeMusic(10);
 	SetScore();
 	Restart(Nmap);
 	playerTime.Start();
@@ -311,6 +333,14 @@ void ModulePlayer::Control()
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && controls)
 	{
 		acceleration = -MAX_ACCELERATION;
+		vehicle->sirens[2].color = Red;
+		vehicle->sirens[3].color = Red;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_UP)
+	{
+		acceleration = -MAX_ACCELERATION;
+		vehicle->sirens[2].color = Yellow;
+		vehicle->sirens[3].color = Yellow;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && controls)
@@ -322,6 +352,11 @@ void ModulePlayer::Control()
 	{
 		playerTime.Start();
 		Restart(Nmap);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN && controls)
+	{
+		emergency = !emergency;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_0) == KEY_REPEAT && controls)	App->scene_intro->LevelSelector(0);

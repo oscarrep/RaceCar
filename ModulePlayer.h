@@ -32,6 +32,7 @@ public:
 public:
 
 	PhysVehicle3D* vehicle;
+	VehicleInfo* car;
 	float turn;
 	float acceleration;
 	float brake;
@@ -40,8 +41,9 @@ public:
 
 	bool controls = true;
 	bool clue = false;
+	bool emergency = false;
 
 	int reset = false;
 	int Nmap = 0;
-
+	int lightCount = 0;
 };

@@ -2,6 +2,8 @@
 
 #include "PhysBody3D.h"
 #include "glmath.h"
+#include "ModulePhysics3D.h"
+#include "p2DynArray.h"
 
 class btRaycastVehicle;
 struct PhysBody3D;
@@ -79,9 +81,5 @@ public:
 
 	VehicleInfo info;
 	btRaycastVehicle* vehicle;
-
-	/*Cube lamps;
-	Cube lamps2;
-	Cube lamps3;
-	Cube lamps4;*/
+	p2DynArray<Cube> sirens;
 };

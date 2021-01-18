@@ -147,6 +147,7 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 	Painting();
+	// player will recieve a clue after 30s in lvl
 	if (lvltime.Read() / 1000 >= 30)
 	{
 		App->player->clue = true;
