@@ -100,7 +100,6 @@ public:
 
 	vec2 p[38];
 	
-	int tricky[38];
 	int circuit[MAX_CIRCUITSIZE];
 
 };
