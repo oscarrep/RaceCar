@@ -183,8 +183,15 @@ void ModulePlayer::Restart(int map)
 {
 	mat4x4 matrix;
 	vehicle->SetTransform(matrix.M);
+
 	Stop();
+
+	clue = false;
+	help = false;
+
 	App->scene_intro->run = true;
+	App->scene_intro->trick = true;
+
 	for (int i = 0; i < 70; ++i)
 	{
 		if (App->scene_intro->circuit[i] == 1)
@@ -220,51 +227,57 @@ void ModulePlayer::UI(int reset)
 	switch (reset)
 	{
 	case 0:
-		if (clue == true) sprintf_s(title, "Really?");
+		if (clue == true || help == true) sprintf_s(title, "Really?");
 		else sprintf_s(title, "LEVEL 0 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
 
 		break;
 
 	case 1:
-		if (clue == true) sprintf_s(title, "Maybe try jumping over the green thing");
+		if (clue == true || help == true) sprintf_s(title, "Maybe try jumping over the green thing");
 		else sprintf_s(title, "LEVEL 1 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
 
 		break;
 
 	case 2:
-		if (clue == true) sprintf_s(title, "Something is not RIGHT");
+		if (clue == true || help == true) sprintf_s(title, "Something is not RIGHT");
 		else sprintf_s(title, "LEVEL 2 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
 		
 		break;
 
 	case 3:
-		if (clue == true) sprintf_s(title, "You could just drive through the middle");
+		if (clue == true || help == true) sprintf_s(title, "You could just drive through the middle");
 		else sprintf_s(title, "LEVEL 3 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
 		
 		break;
 
 	case 4:
-		if (clue == true) sprintf_s(title, "Try thinking outside the box");
+		if (clue == true || help == true) sprintf_s(title, "Try thinking outside the box");
 		else sprintf_s(title, "LEVEL 4 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
 
 		break;
 
 	case 5:
-		if (clue == true) sprintf_s(title, "Just drive to the yellow square..");
+		if (clue == true || help == true) sprintf_s(title, "Just drive to the yellow square..");
 		else sprintf_s(title, "LEVEL 5 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
 		
 		break;
 	
 	case 6:
-		if (clue == true) sprintf_s(title, "Oh shit, behind you!");
+		if (clue == true || help == true) sprintf_s(title, "Oh shit, behind you!");
 		else sprintf_s(title, "LEVEL 6 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
 
 		break;
 
 	case 7:
-		if (clue == true) sprintf_s(title, "You really need to get through this level: %i", App->scene_intro->timetrial.Read() / 1000);
+		if (clue == true || help == true) sprintf_s(title, "You really need to get through this level: %i", App->scene_intro->timetrial.Read() / 1000);
 		else sprintf_s(title, "LEVEL 7 Your Time: %.0f Best Time: %.0f You have 15 seconds. Come on, time is running out 15 SECONDS %i", ShowTime(), bestTime, App->scene_intro->timetrial.Read() / 1000);
 		
+		break;
+
+	case 8:
+		if (clue == true || help == true) sprintf_s(title, "You really need to get through this level: %i", App->scene_intro->timetrial.Read() / 1000);
+		else sprintf_s(title, "LEVEL 7 Your Time: %.0f Best Time: %.0f You have 15 seconds. Come on, time is running out 15 SECONDS %i", ShowTime(), bestTime, App->scene_intro->timetrial.Read() / 1000);
+
 		break;
 
 	case 10:
@@ -297,7 +310,6 @@ void ModulePlayer::Control()
 	{
 		acceleration = MAX_ACCELERATION;
 		App->scene_intro->count = 0;
-
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && controls)
@@ -325,15 +337,14 @@ void ModulePlayer::Control()
 		vehicle->sirens[3].color = Yellow;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && controls)
-		brake = BRAKE_POWER;
-
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
 		playerTime.Start();
 		Restart(Nmap);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN) help = true;
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && controls) brake = BRAKE_POWER;
 	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN && controls) emergency = !emergency;
 
 

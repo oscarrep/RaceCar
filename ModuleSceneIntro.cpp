@@ -27,6 +27,14 @@ bool ModuleSceneIntro::Start()
 	gameWinFx = App->audio->LoadFx("audio/win.ogg");
 	deadFx = App->audio->LoadFx("audio/dead.ogg");
 
+	sensor_tricky.Size(30, 1, 15);
+	pb_tricky = App->physics->AddBody(sensor_tricky, 0);
+	sensor_tricky.color = Yellow;
+	pb_tricky->SetPos(2040, 3, 30);
+	pb_tricky->GetTransform(&sensor_tricky.transform);
+	pb_tricky->SetAsSensor(true);
+	pb_tricky->collision_listeners.add(this);
+
 	//1 = path			 //2 = path limit
 	//3 = flag			 //4 = slider 
 	//5 = obstacle		 //6 = trap
@@ -147,8 +155,21 @@ bool ModuleSceneIntro::Start()
 		2,2,2,2,2,2,2,
 	};
 
+	int circuit8[70]{
+		2,2,2,2,2,2,2,
+		2,2,2,1,15,15,2,
+		2,15,15,15,15,15,2,
+		2,15,15,15,15,15,2,
+		11,15,15,15,15,15,2,
+		2,15,15,15,15,15,2,
+		2,15,15,15,15,15,2,
+		2,15,15,15,15,15,2,
+		2,15,15,15,15,15,2,
+		2,2,2,2,2,2,2,
+	};
+
 	//load circuit, only for 7-column circuits
-	for (int i = 0; i < 8; ++i)
+	for (int i = 0; i < 9; ++i)
 	{
 		if (i == 0) LoadCircuit(circuit, circuit0, i);
 		else if (i == 1) LoadCircuit(circuit, circuit1, i);
@@ -158,12 +179,14 @@ bool ModuleSceneIntro::Start()
 		else if (i == 5) LoadCircuit(circuit, circuit5, i);
 		else if (i == 6) LoadCircuit(circuit, circuit6, i);
 		else if (i == 7) LoadCircuit(circuit, circuit7, i);
+		else if (i == 8) LoadCircuit(circuit, circuit8, i);
 
 	}
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(vec3(0, 0, 0));
 	lvltime.Start();
+	srand(time(NULL));
 
 	return ret;
 }
@@ -179,7 +202,8 @@ bool ModuleSceneIntro::CleanUp()
 // Update
 update_status ModuleSceneIntro::Update(float dt)
 {
-	Painting();
+	PaintingAndManaging();
+
 	// player will recieve a clue after 30s in lvl
 	if (lvltime.Read() / 1000 >= 30)
 	{
@@ -201,11 +225,30 @@ update_status ModuleSceneIntro::Update(float dt)
 		}
 	}
 
+	if (App->player->Nmap == 8)
+	{
+		if (trick == true)
+		{
+			changing.Start();
+			trick = false;
+		}
+		if (changing.Read() / 1000 == 5)
+		{
+			randomize = rand() % 37;
+			tricky[randomize];
+			sensor_tricky.SetPos(p[randomize].x, 3, p[randomize].y);
+			pb_tricky->SetTransform(&sensor_tricky.transform);
+			trick = true;
+		}
+
+	}
+
 	return UPDATE_CONTINUE;
 }
 
 void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
+	//victory sensor
 	if ((body1 == pb_victory) && (body2 == (PhysBody3D*)App->player->vehicle) || (body2 == pb_victory) && (body2 == (PhysBody3D*)App->player->vehicle))
 	{
 		if (win)
@@ -226,6 +269,18 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 		}
 
 	}
+
+	if ((body1 == pb_tricky) && (body2 == (PhysBody3D*)App->player->vehicle) || (body2 == pb_tricky) && (body2 == (PhysBody3D*)App->player->vehicle))
+	{
+		App->audio->PlayFx(lvlFx);
+		lvltime.Start();
+		App->player->reset++;
+		App->player->Nmap++;
+		App->player->Restart(App->player->Nmap);
+		count++;
+	}
+
+	//map limits
 	for (int i = 0; i < s_limits.Count(); i++)
 	{
 		if ((body1 == pb_limits[i]) && (body2 == (PhysBody3D*)App->player->vehicle) || (body2 == pb_limits[i]) && (body1 == (PhysBody3D*)App->player->vehicle))
@@ -439,6 +494,21 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube->clued = true;
 		pb_cubes.PushBack(pb_cube);
 		break;
+
+	case 14:
+
+		break;
+
+	case 15:
+		//Floor
+		cubes.Size(scale.x, scale.y, scale.z);
+		s_cubes.PushBack(cubes);
+		pb_cube = App->physics->AddBody(cubes, 0);
+		pb_cube->SetPos(posX, 1, posZ);
+		pb_cube->painting = true;
+		pb_cubes.PushBack(pb_cube);
+		break;
+
 	default:
 		break;
 	}
@@ -447,18 +517,19 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 int ModuleSceneIntro::Size(int* vec)
 {
 	int count = 0;
-	for (int i = 0; vec[i] <= 13 && vec[i] >= 1; ++i)
+	for (int i = 0; vec[i] <= 15 && vec[i] >= 1; ++i)
 	{
 		count++;
 	}
 	return count;
 }
 
-void ModuleSceneIntro::Painting()
+void ModuleSceneIntro::PaintingAndManaging()
 {
 	Cube* floor_cube = new Cube(5000.0f, 0.0f, 800.0f);
 	floor_cube->color = Green;
 	floor_cube->Render();
+	sensor_tricky.Render();
 
 	if (pb_cubes.Count() != 0 && s_cubes.Count() != 0 && s_cubes.Count() == pb_cubes.Count())
 	{
@@ -496,7 +567,7 @@ void ModuleSceneIntro::Painting()
 			
 			if (pb_cubes[i]->clued == true)
 			{
-				if (App->player->clue == true)
+				if (App->player->clue == true || App->player->help == true)
 				{
 					clueCount++;
 					if (clueCount <= 0)
@@ -540,6 +611,13 @@ void ModuleSceneIntro::LoadCircuit(int* lvlcircuit, int* circuitx, int poscircui
 	for (int j = 0; j < 10; j++) {
 		for (int i = 0; i < 7; i++) {
 			CreateFloor(vec3(30, 1, 30), 30 * i + desp, 30 * j, circuit[(7 * j) + i]);
+			
+			if (circuit[(7 * j) + i] == 15)
+			{
+				p[saving].x = 30 * i + desp;
+				p[saving].y = 30 * j;
+				saving++;
+			}
 		}
 	}
 	//create sensors

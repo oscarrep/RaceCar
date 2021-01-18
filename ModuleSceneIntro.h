@@ -5,7 +5,7 @@
 #include "Primitive.h"
 
 #define MAX_SNAKE 2
-#define MAX_CIRCUITSIZE 600
+#define MAX_CIRCUITSIZE 700
 
 struct PhysBody3D;
 struct PhysMotor3D;
@@ -30,7 +30,7 @@ public:
 
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 	void CreateFloor(vec3 scale, int posX, int posZ, int cir);
-	void Painting();
+	void PaintingAndManaging();
 	void LoadCircuit(int* lvlcircuit, int* circuitx, int poscircuit);
 	void LevelSelector(int lvlnumber);
 	int Size(int* vec);
@@ -71,18 +71,23 @@ public:
 	PhysBody3D* pb_victory;
 	Cube sensor_victory;
 
+	PhysBody3D* pb_tricky;
+	Cube sensor_tricky;
+
 	p2DynArray<PhysBody3D*> pb_endlvl;
 	p2DynArray<Cube>s_endlvl;
 
 	Timer reset;
 	Timer lvltime;
 	Timer timetrial;
+	Timer changing;
 
 	bool win = true;
 	bool first = true;
 	bool move = true;
 	bool run = true;
-	
+	bool trick = true;
+
 	int count = 0;
 	int count2 = 0;
 	int count3 = 0;
@@ -90,7 +95,12 @@ public:
 	int lvlFx = 0;
 	int gameWinFx = 0;
 	int deadFx = 0;
+	int saving = 0;
+	int randomize = 0;
 
+	vec2 p[38];
+	
+	int tricky[38];
 	int circuit[MAX_CIRCUITSIZE];
 
 };

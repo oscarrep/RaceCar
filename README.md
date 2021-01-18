@@ -23,6 +23,8 @@
 
 > R = Restart level.
 
+> Q = Get a clue.
+
 > E = Make sirens go wee woo wee woo.
 
 > 0-9 = Change between levels.

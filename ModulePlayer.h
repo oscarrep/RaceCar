@@ -40,6 +40,7 @@ public:
 	Timer playerTime;
 
 	bool controls = true;
+	bool help = false;
 	bool clue = false;
 	bool emergency = true;
 
