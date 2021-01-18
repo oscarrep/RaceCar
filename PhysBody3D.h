@@ -33,6 +33,7 @@ public:
 	p2List<Module*> collision_listeners;
 	bool painting = true;
 	bool sliders = false;
+	bool clued = false;
 
 };
 

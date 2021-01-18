@@ -82,10 +82,11 @@ public:
 	bool win = true;
 	bool first = true;
 	bool move = true;
-
+	
+	int count = 0;
 	int count2 = 0;
 	int count3 = 0;
-	int count = 0;
+	int clueCount = 0;
 	int lvlFx = 0;
 	int gameWinFx = 0;
 
