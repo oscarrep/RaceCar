@@ -281,7 +281,7 @@ void ModulePlayer::UI(int reset)
 		break;
 
 	case 9:
-		if (clue == true || help == true) sprintf_s(title, "Clue: You don't need jump all ramps");
+		if (clue == true || help == true) sprintf_s(title, "You don't need to jump all the ramps");
 		else sprintf_s(title, "LEVEL 9 Your Time: %.0f Best Time: %.0f", ShowTime(), bestTime);
 
 		break;

@@ -81,17 +81,17 @@ public:
 	Timer lvltime;
 	Timer timetrial;
 	Timer changing;
+	Timer slide;
 
 	bool win = true;
 	bool first = true;
 	bool move = true;
 	bool run = true;
 	bool trick = true;
+	bool up = false;
+	bool down = true;
 
 	int count = 0;
-	int count2 = 0;
-	int count3 = 0;
-	int clueCount = 0;
 	int lvlFx = 0;
 	int gameWinFx = 0;
 	int deadFx = 0;
