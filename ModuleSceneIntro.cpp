@@ -22,12 +22,12 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 	App->audio->PlayMusic("audio/democide.ogg");
-	Mix_VolumeMusic(10);
+	Mix_VolumeMusic(volume);
 	lvlFx = App->audio->LoadFx("audio/lvl.ogg");
 	gameWinFx = App->audio->LoadFx("audio/win.ogg");
 	deadFx = App->audio->LoadFx("audio/dead.ogg");
-
-	sensor_tricky.Size(30, 1, 15);
+	
+	sensor_tricky.Size(30, 1, 15); //Yellow sensor that moves around, lvl8
 	pb_tricky = App->physics->AddBody(sensor_tricky, 0);
 	sensor_tricky.color = Yellow;
 	pb_tricky->SetPos(2010, 3, 210);

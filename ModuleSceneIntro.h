@@ -97,6 +97,7 @@ public:
 	int deadFx = 0;
 	int saving = 0;
 	int randomize = 0;
+	int volume = 10;
 
 	vec2 p[38];
 	

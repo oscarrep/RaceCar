@@ -206,7 +206,7 @@ void ModulePlayer::Restart(int map)
 
 void ModulePlayer::GameWin()
 {
-	Mix_VolumeMusic(10);
+	Mix_VolumeMusic(App->scene_intro->volume);
 	SetScore();
 	App->scene_intro->timetrial.Read() == 0;
 	App->scene_intro->timetrial.Stop();	Restart(Nmap);
@@ -275,13 +275,13 @@ void ModulePlayer::UI(int reset)
 		break;
 
 	case 8:
-		if (clue == true || help == true) sprintf_s(title, "You really need to get through this level: %i", App->scene_intro->timetrial.Read() / 1000);
-		else sprintf_s(title, "LEVEL 7 Your Time: %.0f Best Time: %.0f You have 15 seconds. Come on, time is running out 15 SECONDS %i", ShowTime(), bestTime, App->scene_intro->timetrial.Read() / 1000);
+		if (clue == true || help == true) sprintf_s(title, "You have like 2 seconds to get to the yellow thing.", App->scene_intro->timetrial.Read() / 1000);
+		else sprintf_s(title, "LEVEL 8 Your Time: %.0f Best Time: %.0f Not much mor to say here, honestly.", ShowTime(), bestTime, App->scene_intro->timetrial.Read() / 1000);
 
 		break;
 
 	case 9:
-		if (clue == true || help == true) sprintf_s(title, "You don't need to jump all the ramps");
+		if (clue == true || help == true) sprintf_s(title, "You don't really need to jump all the ramps");
 		else sprintf_s(title, "LEVEL 9 Your Time: %.0f Best Time: %.0f", ShowTime(), bestTime);
 
 		break;
@@ -370,4 +370,20 @@ void ModulePlayer::Control()
 	else if (App->input->GetKey(SDL_SCANCODE_8) == KEY_REPEAT && controls)	App->scene_intro->LevelSelector(8);
 	else if (App->input->GetKey(SDL_SCANCODE_9) == KEY_REPEAT && controls)	App->scene_intro->LevelSelector(9);
 	
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	{
+		if (App->scene_intro->volume < 200)
+		{
+			Mix_VolumeMusic(App->scene_intro->volume += 5);
+		}
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	{
+		if (App->scene_intro->volume > 0)
+		{
+			Mix_VolumeMusic(App->scene_intro->volume -= 5);
+		}
+	}
+
 }
