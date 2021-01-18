@@ -25,6 +25,7 @@ bool ModuleSceneIntro::Start()
 	Mix_VolumeMusic(10);
 	lvlFx = App->audio->LoadFx("audio/lvl.ogg");
 	gameWinFx = App->audio->LoadFx("audio/win.ogg");
+	deadFx = App->audio->LoadFx("audio/dead.ogg");
 
 	//1 = path			 //2 = path limit
 	//3 = flag			 //4 = slider 
@@ -193,7 +194,7 @@ update_status ModuleSceneIntro::Update(float dt)
 			timetrial.Start();
 			run = false;
 		}
-		if (timetrial.Read() / 1000 == 15 && win == false)
+		if (timetrial.Read() / 1000 == 15 && win == true)
 		{
 
 			App->player->Restart(7);
@@ -229,6 +230,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	{
 		if ((body1 == pb_limits[i]) && (body2 == (PhysBody3D*)App->player->vehicle) || (body2 == pb_limits[i]) && (body1 == (PhysBody3D*)App->player->vehicle))
 		{
+			App->audio->PlayFx(deadFx);
 			App->player->Restart(App->player->Nmap);
 		}
 	}

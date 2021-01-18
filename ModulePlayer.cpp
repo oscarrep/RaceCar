@@ -213,7 +213,7 @@ void ModulePlayer::GameWin()
 
 void ModulePlayer::UI(int reset)
 {
-	char title[80];
+	char title[180];
 
 	//clues activate when player stays in a level for an excessive amount of time
 
@@ -262,8 +262,8 @@ void ModulePlayer::UI(int reset)
 		break;
 
 	case 7:
-		if (clue == true) sprintf_s(title, "Clue: Come on, you can do it you are almost there!");
-		else sprintf_s(title, "LEVEL 7 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+		if (clue == true) sprintf_s(title, "You really need to get through this level: %i", App->scene_intro->timetrial.Read() / 1000);
+		else sprintf_s(title, "LEVEL 7 Your Time: %.0f Best Time: %.0f You have 15 seconds. Come on, time is running out 15 SECONDS %i", ShowTime(), bestTime, App->scene_intro->timetrial.Read() / 1000);
 		
 		break;
 

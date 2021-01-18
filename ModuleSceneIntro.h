@@ -89,6 +89,7 @@ public:
 	int clueCount = 0;
 	int lvlFx = 0;
 	int gameWinFx = 0;
+	int deadFx = 0;
 
 	int circuit[MAX_CIRCUITSIZE];
 
