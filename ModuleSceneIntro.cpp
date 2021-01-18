@@ -275,7 +275,10 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			win = false;
 			App->player->controls = false;
 			App->player->reset = 10;
-			App->player->Stop();
+			if (App->input->GetKey(SDL_SCANCODE_R) != KEY_DOWN)
+			{
+				App->player->Stop();
+			}
 		}
 		if (reset.Read() >= 5000)
 		{
@@ -298,7 +301,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	//map limits
 	for (int i = 0; i < s_limits.Count(); i++)
 	{
-		if ((body1 == pb_limits[i]) && (body2 == (PhysBody3D*)App->player->vehicle) || (body2 == pb_limits[i]) && (body1 == (PhysBody3D*)App->player->vehicle))
+		if ((body1 == pb_limits[i]) && (body2 == (PhysBody3D*)App->player->vehicle) && win == true || (body2 == pb_limits[i]) && (body1 == (PhysBody3D*)App->player->vehicle))
 		{
 			App->audio->PlayFx(deadFx);
 			App->player->Restart(App->player->Nmap);

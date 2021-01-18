@@ -121,6 +121,7 @@ bool ModulePlayer::Start()
 
 	vehicle = App->physics->AddVehicle(*car);
 	vehicle->SetPos(30, 2, 30);
+	Nmap = 0;
 	Restart(Nmap);
 
 	vehicle->sirens[0].color = Red;
@@ -270,13 +271,13 @@ void ModulePlayer::UI(int reset)
 
 	case 7:
 		if (clue == true || help == true) sprintf_s(title, "You really need to get through this level: %i", App->scene_intro->timetrial.Read() / 1000);
-		else sprintf_s(title, "LEVEL 7 Your Time: %.0f Best Time: %.0f You have 15 seconds. Come on, time is running out 15 SECONDS %i", ShowTime(), bestTime, App->scene_intro->timetrial.Read() / 1000);
+		else sprintf_s(title, "LEVEL 7 Your Time: %.0f Best Time: %.0f You have 15 seconds. Come on, time is running out %i", ShowTime(), bestTime, App->scene_intro->timetrial.Read() / 1000);
 		
 		break;
 
 	case 8:
-		if (clue == true || help == true) sprintf_s(title, "You have like 2 seconds to get to the yellow thing.", App->scene_intro->timetrial.Read() / 1000);
-		else sprintf_s(title, "LEVEL 8 Your Time: %.0f Best Time: %.0f Not much mor to say here, honestly.", ShowTime(), bestTime, App->scene_intro->timetrial.Read() / 1000);
+		if (clue == true || help == true) sprintf_s(title, "You have like 2 seconds to get to the yellow thing.");
+		else sprintf_s(title, "LEVEL 8 Your Time: %.0f Best Time: %.0f Not much mor to say here, honestly.", ShowTime(), bestTime);
 
 		break;
 
@@ -344,8 +345,8 @@ void ModulePlayer::Control()
 
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
-		playerTime.Start();
-		Restart(Nmap);
+		//playerTime.Start();
+		GameWin();
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && controls)
