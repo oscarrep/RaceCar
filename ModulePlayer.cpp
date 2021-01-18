@@ -58,7 +58,7 @@ bool ModulePlayer::Start()
 
 	// Wheel properties ---------------------------------------
 	float connection_height = 1.2f;
-	float wheel_radius = 0.6f;
+	float wheel_radius = 0.8f;
 	float wheel_width = 0.5f;
 	float suspensionRestLength = 1.2f;
 
@@ -139,42 +139,8 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update(float dt)
 {
-	turn = acceleration = brake = 0.0f;
 
-	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && controls)
-	{
-		acceleration = MAX_ACCELERATION;
-		App->scene_intro->count = 0;
-
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && controls)
-	{
-		if(turn < TURN_DEGREES)
-			turn +=  TURN_DEGREES;
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && controls)
-	{
-		if(turn > -TURN_DEGREES)
-			turn -= TURN_DEGREES;
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && controls)
-	{
-		acceleration = -MAX_ACCELERATION;
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && controls)
-	{
-		brake = BRAKE_POWER;
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
-	{
-		playerTime.Start();
-		Restart(Nmap);
-	}
+	Control();
 
 	vehicle->ApplyEngineForce(acceleration);
 	vehicle->Turn(turn);
@@ -236,11 +202,22 @@ void ModulePlayer::UI(int reset)
 		}
 		else
 		{
+			sprintf_s(title, "LEVEL 0 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
+		}
+		break;
+
+	case 1:
+		if (clue == true)
+		{
+			sprintf_s(title, "Do you need help? Try jumping over that green thing");
+		}
+		else
+		{
 			sprintf_s(title, "LEVEL 1 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
 		}
 
 		break;
-	case 1:
+	case 2:
 		if (clue == true)
 		{
 			sprintf_s(title, "Do you need help? Try jumping over that green thing");
@@ -250,7 +227,7 @@ void ModulePlayer::UI(int reset)
 			sprintf_s(title, "LEVEL 2 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
 		}
 		break;
-	case 2:
+	case 3:
 		if (clue == true)
 		{
 			sprintf_s(title, "Have you tried driving in the middle?");
@@ -260,7 +237,7 @@ void ModulePlayer::UI(int reset)
 			sprintf_s(title, "LEVEL 3 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
 		}
 		break;
-	case 3:
+	case 4:
 		if (clue == true)
 		{
 			sprintf_s(title, "Try to think outside the box");
@@ -270,7 +247,7 @@ void ModulePlayer::UI(int reset)
 			sprintf_s(title, "LEVEL 4 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
 		}
 		break;
-	case 4:
+	case 5:
 		if (clue == true)
 		{
 			sprintf_s(title, "Do you need help? Try jumping over that green thing");
@@ -280,7 +257,7 @@ void ModulePlayer::UI(int reset)
 			sprintf_s(title, "LEVEL 5 %.1f Km/h Time: %.0f Best Time: %.0f", vehicle->GetKmh(), ShowTime(), bestTime);
 		}
 		break;
-	case 5:
+	case 10:
 		sprintf_s(title, "YOU'VE WON! Your Time: %.0f Best Time: %.0f", ShowTime(), bestTime);
 		break;
 	default:
@@ -306,4 +283,56 @@ void ModulePlayer::Stop()
 {
 	vehicle->GetBody()->setAngularVelocity({ 0, 0, 0 });
 	vehicle->GetBody()->setLinearVelocity({ 0, 0, 0 });
+}
+
+void ModulePlayer::Control()
+{
+	turn = acceleration = brake = 0.0f;
+
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && controls)
+	{
+		acceleration = MAX_ACCELERATION;
+		App->scene_intro->count = 0;
+
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && controls)
+	{
+		if (turn < TURN_DEGREES)
+			turn += TURN_DEGREES;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && controls)
+	{
+		if (turn > -TURN_DEGREES)
+			turn -= TURN_DEGREES;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && controls)
+	{
+		acceleration = -MAX_ACCELERATION;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && controls)
+	{
+		brake = BRAKE_POWER;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+	{
+		playerTime.Start();
+		Restart(Nmap);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_0) == KEY_REPEAT && controls)	App->scene_intro->LevelSelector(0);
+	else if (App->input->GetKey(SDL_SCANCODE_1) == KEY_REPEAT && controls)	App->scene_intro->LevelSelector(1);
+	else if (App->input->GetKey(SDL_SCANCODE_2) == KEY_REPEAT && controls)	App->scene_intro->LevelSelector(2);
+	else if (App->input->GetKey(SDL_SCANCODE_3) == KEY_REPEAT && controls)	App->scene_intro->LevelSelector(3);
+	else if (App->input->GetKey(SDL_SCANCODE_4) == KEY_REPEAT && controls)	App->scene_intro->LevelSelector(4);
+	else if (App->input->GetKey(SDL_SCANCODE_5) == KEY_REPEAT && controls)	App->scene_intro->LevelSelector(5);
+	else if (App->input->GetKey(SDL_SCANCODE_6) == KEY_REPEAT && controls)	App->scene_intro->LevelSelector(6);
+	else if (App->input->GetKey(SDL_SCANCODE_7) == KEY_REPEAT && controls)	App->scene_intro->LevelSelector(7);
+	else if (App->input->GetKey(SDL_SCANCODE_8) == KEY_REPEAT && controls)	App->scene_intro->LevelSelector(8);
+	else if (App->input->GetKey(SDL_SCANCODE_9) == KEY_REPEAT && controls)	App->scene_intro->LevelSelector(9);
+	
 }

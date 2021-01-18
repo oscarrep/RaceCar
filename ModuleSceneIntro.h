@@ -5,7 +5,7 @@
 #include "Primitive.h"
 
 #define MAX_SNAKE 2
-#define MAX_CIRCUITSIZE 300
+#define MAX_CIRCUITSIZE 600
 
 struct PhysBody3D;
 struct PhysMotor3D;
@@ -31,8 +31,9 @@ public:
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 	void CreateFloor(vec3 scale, int posX, int posZ, int cir);
 	void Painting();
-	int Size(int* vec);
 	void LoadCircuit(int* lvlcircuit, int* circuitx, int poscircuit);
+	void LevelSelector(int lvlnumber);
+	int Size(int* vec);
 
 public:
 	/*
@@ -63,10 +64,6 @@ public:
 
 	PhysBody3D* pb_wheel2;
 	Cylinder p_wheel2;
-
-	Sphere chain;
-	Cube  rightstick;
-	PhysBody3D* pb_chain, * pb_leftstick, * pb_rightstick, * pb_pole;
 
 	PhysMotor3D* left_wheel;
 	PhysMotor3D* right_wheel;

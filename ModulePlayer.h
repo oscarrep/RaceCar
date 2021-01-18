@@ -26,6 +26,8 @@ public:
 	void SetScore();
 	void Stop();
 
+	void Control();
+
 
 public:
 
