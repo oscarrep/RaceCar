@@ -1,4 +1,4 @@
-# RaceCar
+# OYCar
  
  Hello there. 
  My name is Oscar. I made this game as an assignment for my Physics II class on CITM UPC using C++, Bullet and OpenGL.
@@ -12,6 +12,7 @@
 > You'll need to drive your car through the levels and find a yellow floor pad on each of them. You might need to think outside the box, not everything is what it looks like. But don't worry you'll get some clues if you get stuck.
 
 > Here are the paths for each level: 
+https://i.gyazo.com/669666ead21ea42dbcb7a299db481427.png
  
  ## Controls
 
