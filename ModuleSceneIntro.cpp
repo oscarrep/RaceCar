@@ -367,10 +367,9 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube2 = App->physics->AddBody(cubes2, 0);
 		pb_cube2->SetPos(posX, 1, posZ);
 		pb_limits.PushBack(pb_cube2);
-
 		//Slider
 		cubes.Size(scale.x, 8, scale.y);
-		//cubes.color = Green;
+		/*cubes.color = Green;*/
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 100);
 
@@ -464,7 +463,6 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube2->SetPos(posX, 3, posZ);
 		pb_endlvl.PushBack(pb_cube2);
 
-
 		break;
 
 	case 10:
@@ -475,7 +473,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube2->SetPos(posX, 1, posZ);
 		pb_limits.PushBack(pb_cube2);
 
-		//ramp start
+		//ramp begin
 		cubes.Size(scale.x, scale.y, scale.z - 15);
 		cubes.SetRotation(-15, vec3(1, 0, 0));
 		s_cubes.PushBack(cubes);
@@ -486,8 +484,8 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		break;
 
 	case 11:
-		// big wall
-		cubes.Size(1, 100, 500); 
+		//Big Wall
+		cubes.Size(1, 100, 500);
 		cubes.color = Black;
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
@@ -510,11 +508,10 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		cubes.SetRotation(10, vec3(1, 0, 0));
 		s_cubes.PushBack(cubes);
 		pb_cube = App->physics->AddBody(cubes, 0);
-		pb_cube->SetPos(posX, 3, posZ+10);
+		pb_cube->SetPos(posX, 3, posZ + 10);
 		pb_cube->painting = true;
 		pb_cubes.PushBack(pb_cube);
 		break;
-
 	case 13:
 		//Clued floor
 		cubes.Size(scale.x, scale.y, scale.z);
@@ -525,9 +522,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube->clued = true;
 		pb_cubes.PushBack(pb_cube);
 		break;
-
 	case 14:
-
 		//Floor
 		cubes.Size(scale.x, scale.y, scale.z);
 		s_cubes.PushBack(cubes);
@@ -543,9 +538,7 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube->SetPos(posX, 3, posZ - 10);
 		pb_cube->painting = true;
 		pb_cubes.PushBack(pb_cube);
-
 		break;
-
 	case 15:
 		//Floor
 		cubes.Size(scale.x, scale.y, scale.z);
@@ -555,7 +548,6 @@ void ModuleSceneIntro::CreateFloor(vec3 scale, int posX, int posZ, int cir)
 		pb_cube->painting = true;
 		pb_cubes.PushBack(pb_cube);
 		break;
-
 	default:
 		break;
 	}
@@ -598,21 +590,32 @@ void ModuleSceneIntro::PaintingAndManaging()
 					slide.Start();
 					move = false;
 				}
-
 				if (slide.Read() <= 500)
+				{
 					pb_cubes[i]->GetBody()->applyCentralImpulse(btVector3(0, 800, 0));
-
+				}
 				if (slide.Read() >= 1000 && slide.Read() <= 1500)
+				{
 					pb_cubes[i]->GetBody()->applyCentralImpulse(btVector3(0, -800, 0));
+				}
+				if (slide.Read() >= 2000)
+				{
+					move = true;
+				}
 			}
-
+			//The cubes that have the clue ability will change color when the game gives the clue
 			if (pb_cubes[i]->clued == true)
 			{
 				if (App->player->clue == true || App->player->help == true)
+				{
 					s_cubes[i].color = Green;
-				else s_cubes[i].color = White;
-
+				}
+				else
+				{
+					s_cubes[i].color = White;
+				}
 			}
+
 		}
 
 	}
